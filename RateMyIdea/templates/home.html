@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Rate My Idea{% endblock %}
+
+{% block content %}
+<br>
+<a href="{% url 'new_idea' %}" class="btn btn-dark">New Idea</a>
+<br>
+
+
+<div class="container">
+    <div class="row">
+        <table class="table">
+            <thead class="thead-inverse text-center">
+                <tr>
+                    <th>Idea</th>
+                    <th>Average Rating</th>
+                    <th>Votes</th>
+                    <th>Author</th>
+                    <th>Date Posted</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if idea %}
+                {% for idea in ideas %}
+                <tr class="text-center">
+                    <td>{{ idea.idea }}</td>
+                    <td>{{ idea.rating }}</td>
+                    <td>{{ idea.votes }}</td>
+                    <td><a href="{% url 'author' idea.id %}">{{ idea.author }}</a></td>
+                    <td>{{ idea.date_posted }}</td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <p>There are curently no ideas to rate. Click on 'New Idea' to add one</p>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+{% endblock %}
+

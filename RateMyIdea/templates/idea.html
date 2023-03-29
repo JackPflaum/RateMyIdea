@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Idea{% endblock %}
+
+{% block content %}
+<div class="row d-flex justify-content-between">
+	<div>
+		<h1>{{ myidea.author }}</h1>
+		<h5 style="text-indent: 25px;">Date: {{ myidea.date_posted }}</h5>
+	</div>
+	<div class="border border-dark rounded">
+		<h45>{{ myidea.rating }}/10</h45>
+	</div>
+</div>
+<p class="border border-dark rounded">{{ myidea.idea }}</p>
+<h4>Comments:</h4>
+
+{% if comments %}
+<form method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<button type="submit">Submit</button>
+</form>
+	{% for comment in comments %}
+		<h4 style="text-indent: 25px;">{{ comment.user }} ({{ comment.date }})</h4>
+		<p class="border border-dark">{{ comment.comment }}</p>
+	{% endfor %}
+
+{% else %}
+<h4>Be the first to comment.</h4>
+<form method="post">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<button type="submit">Submit</button>
+</form>
+{% endif %}
+
+
+{% endblock %}

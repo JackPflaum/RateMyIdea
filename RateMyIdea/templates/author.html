@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Author{% endblock %}
+
+{% block content %}
+<h3>{{ author.name }}</h3>
+<p>Joined: {{ author.joined }}</p>
+<p>Ideas: {{ author.number_of_ideas }}</p>
+<br>
+<a href="{% url 'new_dea' %}" class="btn btn-dark">New Idea</a>
+<br>
+
+{% for idea in ideas %}
+
+<table class="table">
+    <thead class="thead-inverse text-center">
+        <tr>
+            <th>Idea</th>
+            <th>Rating</th>
+            <th>Votes</th>
+            <th>Comments</th>
+            <th>Posted</th>
+         </tr>
+    </thead>
+    <tbody>
+        <tr class="text-center">
+            <td>{{ idea.idea }}</td>
+            <td>{{ idea.rating }}</td>
+            <td>{{ idea.votes }}</td>
+            <td>{{ idea.comments }}</td>
+            <td>{{ idea.date_posted }}</td>
+        </tr>
+    </tbody>
+</table>
+
+{% empty %}
+
+<p>You have not posted any ideas</p>
+
+{% endfor %}
+
+
+{% endblock %}
