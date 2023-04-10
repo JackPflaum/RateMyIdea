@@ -4,14 +4,30 @@
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <title>{% block title %}Rate My Idea{% endblock %}</title>
 </head>
 <body>
 
-<div class="p-3 bg-dark text-white">
-    <h3>Rate My Idea</h3>
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <div class="container-fluid">
+    <h3 class="navbar-brand">Rate My Idea</h3>
+    <ul class="navbar-nav">
+        <li class="nav-item"><a href="{% url 'ideas:home' %}" class="nav-link">Home</a></li>
+        <li class="nav-item"><a href="{% url 'ideas:new_idea' %}" class="nav-link">New Idea</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+        <li class="nav-item"><a href="#" class="nav-link">Contact</a></li>
+        {% if request.user.is_authenticated %}
+            <li class="nav-item"><a href="#" class="nav-link">Author</a></li>
+            <li class="nav-item"><a href="{% url 'users:logout' %}" class='btn btn-secondary nav-link'>Logout</a></li>
+        {% else %}
+            <li class="nav-item"><a href="{% url 'users:login' %}" class='btn btn-primary nav-link'>Login</a></li>
+            <li class="nav-item"><a href="{% url 'users:signup' %}" class='btn btn-secondary nav-link'>Signup</a></li>
+        {% endif %}
+    </ul>
 </div>
+</nav>
 
 
 {% block content %}

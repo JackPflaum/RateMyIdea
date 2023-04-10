@@ -22,8 +22,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-load_dotenv(find_dotenv)
-SECRET_KEY = os.environ('SECRET_KEY')
+load_dotenv(find_dotenv())
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ideas',
     'users',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -59,7 +60,7 @@ ROOT_URLCONF = 'RateMyIdea.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/register'), os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -104,6 +105,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# backend authenticate method modified to accept email instead of username
+AUTHENTICATION_BACKENDS = ['users.backends.EmailBackend',
+                           'django.contrib.auth.backends.ModelBackend',] # the addition of this line is important
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
@@ -131,3 +136,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # user model redfined
 AUTH_USER_MODEL = 'users.User'
+
+# tells django where to redirect user after login and logout
+LOGIN_URL = 'users:login'
+
+LOGIN_REDIRECT_URL = 'ideas:home'
+
+LOGOUT_REDIRECT_URL = 'ideas:home'

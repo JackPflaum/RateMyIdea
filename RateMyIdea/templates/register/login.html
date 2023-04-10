@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row d-flex justify-content-center align-items-center" style="height: 100vh">
+        <div class="col-lg-6 col-md-8 col-sm-10 bg-info ">
+            <form method="post" class="form">
+                {% csrf_token %}
+                <h3 class="text-center my-5">Login</h3>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        </div>
+                        {% render_field form.username placeholder="Enter email" class+="form-control" %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        </div>
+                        {% render_field form.password placeholder="Enter password" class+="form-control" %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </div>
+                <div class="form-group">
+                    <p class="text-center">Don't have an account? <a href="{% url 'users:signup' %}">Signup here</a>
+                       </p> 
+                    </div>
+                <div class="form-group">
+                    <p class="text-center"><a href="{% url 'users:password_reset' %}">Forgot password?</a>
+                    </p>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

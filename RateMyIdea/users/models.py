@@ -9,6 +9,7 @@ class UserManager(BaseUserManager):
     use_in_migration = True
 
     def _create_user(self, email, password, **extra_fields):
+        """create and save a user with the submitted email and password"""
         if not email:
             raise ValueError('Users require an email field')
         email = self.normalize_email(email)
@@ -18,6 +19,7 @@ class UserManager(BaseUserManager):
         return user
     
     def create_superuser(self, email, password=None, **extra_fields):
+        """create and save a superuser with the submitted email and password"""
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -29,11 +31,10 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-
 class User(AbstractUser):
+    """Custom User model"""
     # in settings.py add AUTH_USER_MODEL = '<appname>.<custom_user_model_class>'
 
-    # username = None
     email = models.EmailField(_('email_address'), unique=True)
 
     objects = UserManager()
@@ -47,6 +48,7 @@ class User(AbstractUser):
 
 
 class Author(models.Model):
+    """This model represents the users profile"""
     # extending User model using one-to-one link and signals in signals.py
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
