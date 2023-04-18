@@ -3,18 +3,19 @@
 {% block title %}Author{% endblock %}
 
 {% block content %}
-<h3>{{ author.name }}</h3>
+<h3>{{ author.user.username }}</h3>
 <p>Joined: {{ author.joined }}</p>
-<p>Ideas: {{ author.number_of_ideas }}</p>
+<p>Ideas Published: {{ number_of_ideas_published }}</p>
 <br>
-<a href="{% url 'new_dea' %}" class="btn btn-dark">New Idea</a>
-<br>
+<a href="{% url 'ideas:new_idea' %}" class="btn btn-dark">New Idea</a>
 
+
+<h5>My Ideas</h5>
 {% for idea in ideas %}
-
 <table class="table">
     <thead class="thead-inverse text-center">
         <tr>
+            <th>Title</th>
             <th>Idea</th>
             <th>Rating</th>
             <th>Votes</th>
@@ -24,6 +25,7 @@
     </thead>
     <tbody>
         <tr class="text-center">
+            <td>{{ idea.title }}</td>
             <td>{{ idea.idea }}</td>
             <td>{{ idea.rating }}</td>
             <td>{{ idea.votes }}</td>

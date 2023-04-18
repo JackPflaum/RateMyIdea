@@ -5,35 +5,39 @@
 {% block content %}
 <div class="row d-flex justify-content-between">
 	<div>
-		<h1>{{ myidea.author }}</h1>
-		<h5 style="text-indent: 25px;">Date: {{ myidea.date_posted }}</h5>
+		<h1>{{ idea.author.username }}</h1>
+		<h5 style="text-indent: 25px;">Date: {{ idea.date_posted }}</h5>
 	</div>
 	<div class="border border-dark rounded">
-		<h45>{{ myidea.rating }}/10</h45>
+		<h5>{{ rating }}/10</h5>
+		<form method="post">
+			{% csrf_token %}
+			{{ rating_form.as_p }}
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
 	</div>
 </div>
-<p class="border border-dark rounded">{{ myidea.idea }}</p>
+<h5>{{ idea.title }}</h5>
+<p class="border border-dark rounded">{{ idea.idea }}</p>
 <h4>Comments:</h4>
 
 {% if comments %}
-<form method="post">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<button type="submit">Submit</button>
-</form>
+
 	{% for comment in comments %}
-		<h4 style="text-indent: 25px;">{{ comment.user }} ({{ comment.date }})</h4>
+		<h5 style="text-indent: 25px;">{{ comment.author.username }} ({{ comment.date_commented }})</h5>
 		<p class="border border-dark">{{ comment.comment }}</p>
 	{% endfor %}
 
 {% else %}
-<h4>Be the first to comment.</h4>
-<form method="post">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<button type="submit">Submit</button>
-</form>
+
+    <h4>Be the first to comment.</h4>
+
 {% endif %}
 
+<form method="post">
+	{% csrf_token %}
+	{{ comment_form.as_p }}
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>
 
 {% endblock %}

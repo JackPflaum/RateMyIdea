@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
+from django.utils.text import slugify
 
 
 class UserManager(BaseUserManager):
@@ -55,6 +56,14 @@ class Author(models.Model):
     bio = models.TextField()
     image = models.ImageField(blank=True)
     joined = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.user.username)
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.user.email

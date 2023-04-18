@@ -14,6 +14,7 @@
         <table class="table">
             <thead class="thead-inverse text-center">
                 <tr>
+                    <th>Title</th>
                     <th>Idea</th>
                     <th>Average Rating</th>
                     <th>Votes</th>
@@ -22,13 +23,14 @@
                 </tr>
             </thead>
             <tbody>
-                {% if idea %}
+                {% if ideas %}
                 {% for idea in ideas %}
                 <tr class="text-center">
+                    <td><a href="{% url 'ideas:idea' idea.slug %}">{{ idea.title }}</a></td>
                     <td>{{ idea.idea }}</td>
-                    <td>{{ idea.rating }}</td>
+                    <td>{{ idea.average_rating }}</td>
                     <td>{{ idea.votes }}</td>
-                    <td><a href="{% url 'ideas:author' idea.id %}">{{ idea.author }}</a></td>
+                    <td><a href="{% url 'ideas:author' idea.author.username %}">{{ idea.author.username }}</a></td>
                     <td>{{ idea.date_posted }}</td>
                 </tr>
                 {% endfor %}

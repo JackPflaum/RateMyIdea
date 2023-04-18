@@ -8,5 +8,10 @@ class CustomUserAdmin(UserAdmin):
     list_display = ['username', 'email', 'first_name', 'last_name', 'is_staff']
 
 
+class AuthorAdmin(admin.ModelAdmin):
+    model = Author
+    list_display = ['user', 'bio', 'image', 'joined', 'slug']
+
+
 admin.site.register(User, CustomUserAdmin)
-admin.site.register(Author)
+admin.site.register(Author, AuthorAdmin)
