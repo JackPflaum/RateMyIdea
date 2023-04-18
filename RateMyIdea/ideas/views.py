@@ -55,45 +55,38 @@ class IdeaView(View):
                    'idea': idea, 'rating': rating, 'comments': comments}
         return render(request, self.template_name, context)
     
+
+    @login_required
     def post(self, request, slug):
-        """ handle Post request for user comment or rating of idea"""
+        """handle Post request for user comment or rating of idea.
+        Redirect to login screen  if not logged in."""
         comment_form = CommentForm(request.POST)
         rating_form = RatingForm(request.POST)
+
+        # allow for updating user rating if they've already rated. if rating exits then update.
+        # I used filter() because it returns an empty query_set whereas get() raises 
+        # a DoesNotExist exception that needs to be handled.
+        idea = Idea.object.get(slug=slug)
+        rating_exists = Rating.objects.filter(idea=idea, author=request.user).first()
+
+        if rating_exists and rating_form.is_valid():
+            # update existing rating
+            rating_exists.rating = rating_form.cleaned_data['rating']
+            rating_exists.save()
         if comment_form.is_valid() and not rating_form.is_valid():
             # only save comment form
             comment = comment_form.save(commit=False)
             comment.idea = Idea.objects.get(slug=slug)
             comment.author = request.user
             comment.save()
-            return redirect('ideas:home')
         elif rating_form.is_valid() and not comment_form.is_valid():
             # only save users rating form
             rating = rating_form.save(commit=False)
             rating.idea = Idea.objects.get(slug=slug)
             rating.author = request.user
             rating.save()
-            return redirect('ideas:home')
 
-# ctrl + /
-# def idea(request, slug):
-#     """show users idea and comments from other users"""
-#     if request.method == 'POST':
-#         form = CommentForm(request.POST)
-#         if form.is_valid():
-#             comment = form.save(commit=False)
-#             comment.idea = Idea.objects.get(slug=slug)
-#             comment.author = request.user
-#             comment.save()
-#             return redirect('home')
-#     else:
-#         form = CommentForm()
-#         idea = Idea.objects.get(slug=slug)
-
-#         # double underscore __ is used to perform lookups that span relationships
-#         # idea__slug means that we are transversing the 'idea' relationship and filtering the slug field of the 'Idea' model
-#         comments = Comment.objects.filter(idea__slug=slug).order_by('date_commented')
-#         context = {'form': form, 'idea': idea, 'comments': comments}
-#     return render(request, 'idea.html', context)
+        return redirect('ideas:idea')
 
 
 @login_required
