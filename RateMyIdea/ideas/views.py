@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator
 from .models import Idea, Comment, Rating
 from users.models import Author
-from django.db.models import Sum, Avg
+from django.db.models import Sum, Avg, Count
 from .forms import NewIdeaForm, CommentForm, RatingForm
 from django.views import View
 from django.views.generic import TemplateView
@@ -14,11 +14,11 @@ def home(request):
     """home page showing most recent ideas posted by users"""
     # annotate query_set method allows you to add new fields to an instance in a query_set based on values
     # of related fields or calculations on those fields.
-    # average_rating is a new field added to the Idea instance query_set that 
+    # average_rating is a new field added to the Idea instance query_set 
     # idea_rating is the related name, meaning the reverse relationship from Idea to Rating.
     # idea_rating__rating is a field lookup that traverses the reverse relationship and accesses the
     # rating field of Rating model.
-    ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating'))
+    ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating'), votes=Count('idea_rating__rating'))
 
     # ideas per page from Idea model
     paginator = Paginator(ideas_list, 20)
