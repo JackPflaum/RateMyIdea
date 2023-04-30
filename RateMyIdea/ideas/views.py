@@ -61,8 +61,7 @@ class IdeaView(TemplateView):
         if self.request.user.is_authenticated:
             user_rating = Rating.objects.filter(idea=idea, author=self.request.user).first()
             user_rating_value = user_rating.rating if user_rating else None
-
-        context['user_rating_value'] = user_rating_value
+            context['user_rating_value'] = user_rating_value
         return context
     
     def get(self, request, slug):

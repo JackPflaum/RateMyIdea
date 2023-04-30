@@ -11,7 +11,6 @@
 
 
 <h5>My Ideas</h5>
-{% for idea in ideas %}
 <table class="table">
     <thead class="thead-inverse text-center">
         <tr>
@@ -24,6 +23,8 @@
          </tr>
     </thead>
     <tbody>
+        {% if ideas %}
+        {% for idea in ideas %}
         <tr class="text-center">
             <td>{{ idea.title }}</td>
             <td>{{ idea.idea }}</td>
@@ -32,14 +33,14 @@
             <td>{{ idea.comments }}</td>
             <td>{{ idea.date_posted }}</td>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
-
-{% empty %}
+{% else %}
 
 <p>You have not posted any ideas</p>
 
-{% endfor %}
+{% endif %}
 
 
 {% endblock %}
