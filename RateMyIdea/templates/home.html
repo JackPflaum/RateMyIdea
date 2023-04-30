@@ -28,7 +28,7 @@
                 <tr class="text-center">
                     <td><a href="{% url 'ideas:idea' idea.slug %}">{{ idea.title }}</a></td>
                     <td>{{ idea.idea }}</td>
-                    <td>{{ idea.average_rating }}</td>
+                    <td>{{ idea.average_rating|floatformat:1 }}</td>
                     <td>{{ idea.votes }}</td>
                     <td><a href="{% url 'ideas:author' idea.author.username %}">{{ idea.author.username }}</a></td>
                     <td>{{ idea.date_posted }}</td>

@@ -15,21 +15,24 @@ class CommentForm(forms.ModelForm):
 
 class RatingForm(forms.ModelForm):
 
-    # the default behaviour of modelForm is to create a new instance if one doesn't exist.
-    # we need to pass the existing instance to the form argument.
+    # we need to pass the existing instance to the form argument if it does exist.
     # '__init__' modifies the form behaviour so that it prepopulates the rating field in the form.
+    # the '__init__' method gets called when you create a new instance of the form.
+    
+    # def __init__(self, *args, **kwargs):
+    #     # pass existing rating to the form
+    #     super().__init__(*args, **kwargs)    # call parent class first to ensure form is properly initialized.
+    #     self.instance = kwargs.get('instance')    # check if an instance parameter is provided in kwargs.
 
-    def __init__(self, *args, **kwargs):
-        # Pass the existing rating value to the form
-        self.instance = kwargs.get('instance')
-        initial = kwargs.get('initial', {})
-        initial['rating'] = self.instance.rating if self.instance else None
-        kwargs['initial'] = initial
-        super().__init__(*args, **kwargs)
+    #     # create a new dictionary which holds initial values for the form field.
+    #     # it checks if there are existing initial values in kwargs dict.
+    #     # if there are initial values, it copies them into 'initial' value.
+    #     # if there are no existing initial values, it sets initial to an empty dict.
+    #     initial = kwargs.get('initial', {})
 
-    class Meta:
-        model = Rating
-        fields = ['rating']
+    #     # set existing instance rating value to the rating field or set to None if one doesn't exist.
+    #     initial['rating'] = self.instance.rating if self.instance else None
+    #     kwargs['initial'] = initial
 
     class Meta:
         model = Rating

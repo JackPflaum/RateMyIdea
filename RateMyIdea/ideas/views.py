@@ -5,7 +5,9 @@ from users.models import Author
 from django.db.models import Sum, Avg
 from .forms import NewIdeaForm, CommentForm, RatingForm
 from django.views import View
+from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 def home(request):
@@ -28,7 +30,8 @@ def home(request):
     return render(request, 'home.html', context)
 
 
-class IdeaView(View):
+@method_decorator(login_required, name="post")
+class IdeaView(TemplateView):
     template_name = 'idea.html'
 
     def get_average_rating(self, idea):
@@ -39,54 +42,72 @@ class IdeaView(View):
         # rating__sum is the key used to access the sum of the 'rating' values from the dictionary.
         total_ratings = ratings.aggregate(Sum('rating'))['rating__sum'] or 0
         number_of_ratings = ratings.count() or 0
-        return total_ratings / number_of_ratings
+        if number_of_ratings > 0:
+            return total_ratings/number_of_ratings
+        else:
+            return None
+        
+    def get_context_data(self, **kwargs):
+        # call corresponding method of parent class and updating context dict. with data defined in get_context_data() method
+        context = super().get_context_data(**kwargs)
+        # add additional data to context dictionary that is available to all when accessing this method
+        context['user'] = self.request.user
+        context['rating_form'] = RatingForm()
+        context['comment_form'] = CommentForm()
+        return context
     
     def get(self, request, slug):
         """ get idea, user comments and forms for displaying to user"""
-        comment_form = CommentForm()
-        rating_form = RatingForm()
         idea = Idea.objects.get(slug=slug)
         rating = self.get_average_rating(idea)
 
         # double underscore __ is used to perform lookups that span relationships
         # idea__slug means that we are transversing the 'idea' relationship and filtering the slug field of the 'Idea' model
         comments = Comment.objects.filter(idea__slug=slug).order_by('date_commented')
-        context = {'comment_form': comment_form, 'rating_form': rating_form,
-                   'idea': idea, 'rating': rating, 'comments': comments}
+        context = {'idea': idea, 'rating': rating, 'comments': comments}
+        context.update(self.get_context_data(**context))
         return render(request, self.template_name, context)
     
-
-    @login_required
     def post(self, request, slug):
         """handle Post request for user comment or rating of idea.
         Redirect to login screen  if not logged in."""
         comment_form = CommentForm(request.POST)
         rating_form = RatingForm(request.POST)
 
-        # allow for updating user rating if they've already rated. if rating exits then update.
+        # allow for updating user rating if they've already rated. if rating exists then update.
         # I used filter() because it returns an empty query_set whereas get() raises 
         # a DoesNotExist exception that needs to be handled.
-        idea = Idea.object.get(slug=slug)
-        rating_exists = Rating.objects.filter(idea=idea, author=request.user).first()
+        idea = Idea.objects.get(slug=slug)
+        rating_exists = Rating.objects.filter(idea=idea, author=self.request.user).first()
 
-        if rating_exists and rating_form.is_valid():
-            # update existing rating
-            rating_exists.rating = rating_form.cleaned_data['rating']
-            rating_exists.save()
-        if comment_form.is_valid() and not rating_form.is_valid():
+        if rating_form.is_valid():
+            if rating_exists:
+                # update existing rating
+                rating_exists.rating = rating_form.cleaned_data['rating']
+                rating_exists.idea = idea
+                rating_exists.author = self.request.user
+                rating_exists.save()
+            else:
+                # create new rating
+                rating = rating_form.save(commit=False)
+                rating.idea = idea
+                rating.author = self.request.user
+                rating.save()
+        elif comment_form.is_valid() and not rating_form.is_valid():
             # only save comment form
             comment = comment_form.save(commit=False)
-            comment.idea = Idea.objects.get(slug=slug)
-            comment.author = request.user
+            comment.idea = idea
+            comment.author = self.request.user
             comment.save()
-        elif rating_form.is_valid() and not comment_form.is_valid():
-            # only save users rating form
-            rating = rating_form.save(commit=False)
-            rating.idea = Idea.objects.get(slug=slug)
-            rating.author = request.user
-            rating.save()
 
-        return redirect('ideas:idea')
+        rating = self.get_average_rating(idea)
+
+        # True if user has rated the idea and False if otherwise.
+        user_has_rated = Rating.objects.filter(idea=idea, author=self.request.user.id).exists()
+        comments = Comment.objects.filter(idea__slug=slug).order_by('date_commented')
+        context = {'idea': idea, 'rating': rating, 'user_has_rated': user_has_rated, 'comments': comments}
+        context.update(self.get_context_data(**context))
+        return render(request, self.template_name, context)
 
 
 @login_required
