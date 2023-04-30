@@ -14,20 +14,19 @@
 	</div>
 	<div class="border border-dark rounded">
 		{% if rating|is_numeric %}
-			<h5>{{ rating|floatformat:1 }}/10</h5>
+			<h5>Average Rating {{ rating|floatformat:1 }}/10</h5>
 		{% else %}
 			<p>Be the first to rate this idea</p>
 		{% endif %}
 		<form method="post">
 			{% csrf_token %}
 			{{ rating_form.as_p }}
+			{% if user_rating_value %}
+				<p class="text-success">You rated this {{ user_rating_value }}/10</p>
+			{% endif %}
 
 			{% if user.is_authenticated %}
-				{% if user_has_rated %}
-					<button type="submit" class="btn btn-primary">Resubmit</button>
-				{% else %}
-					<button type="submit" class="btn btn-primary">Submit</button>
-				{% endif %}
+				<button type="submit" class="btn btn-primary">Submit</button>
 			{% else %}
 				<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
 			{% endif %}

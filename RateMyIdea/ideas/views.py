@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.core.paginator import Paginator
 from .models import Idea, Comment, Rating
 from users.models import Author
@@ -32,6 +32,7 @@ def home(request):
 
 @method_decorator(login_required, name="post")
 class IdeaView(TemplateView):
+    model = Idea
     template_name = 'idea.html'
 
     def get_average_rating(self, idea):
@@ -54,6 +55,14 @@ class IdeaView(TemplateView):
         context['user'] = self.request.user
         context['rating_form'] = RatingForm()
         context['comment_form'] = CommentForm()
+
+        idea = Idea.objects.get(slug=self.kwargs['slug'])    # self.kwargs is captured from the URL pattern
+        # if the user is logged in then get the value that they rated the idea
+        if self.request.user.is_authenticated:
+            user_rating = Rating.objects.filter(idea=idea, author=self.request.user).first()
+            user_rating_value = user_rating.rating if user_rating else None
+
+        context['user_rating_value'] = user_rating_value
         return context
     
     def get(self, request, slug):
@@ -100,12 +109,10 @@ class IdeaView(TemplateView):
             comment.author = self.request.user
             comment.save()
 
-        rating = self.get_average_rating(idea)
+        rating = self.get_average_rating(idea)        
 
-        # True if user has rated the idea and False if otherwise.
-        user_has_rated = Rating.objects.filter(idea=idea, author=self.request.user.id).exists()
         comments = Comment.objects.filter(idea__slug=slug).order_by('date_commented')
-        context = {'idea': idea, 'rating': rating, 'user_has_rated': user_has_rated, 'comments': comments}
+        context = {'idea': idea, 'rating': rating, 'comments': comments}
         context.update(self.get_context_data(**context))
         return render(request, self.template_name, context)
 
