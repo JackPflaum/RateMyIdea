@@ -36,7 +36,7 @@ class User(AbstractUser):
     """Custom User model"""
     # in settings.py add AUTH_USER_MODEL = '<appname>.<custom_user_model_class>'
 
-    email = models.EmailField(_('email_address'), unique=True)
+    email = models.EmailField(_('email address'), unique=True)
 
     objects = UserManager()
 

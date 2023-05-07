@@ -10,6 +10,13 @@
             <form method="post" class="form">
                 {% csrf_token %}
                 <h3 class="text-center my-5">Login</h3>
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            <strong>{{ error }}</strong><br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
                 <div class="form-group">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
