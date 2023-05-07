@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'ideas',
     'users',
     'widget_tweaks',
+    #'bootstrap_pagination',
 ]
 
 MIDDLEWARE = [

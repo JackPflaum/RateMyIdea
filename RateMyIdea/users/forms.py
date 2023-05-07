@@ -10,13 +10,26 @@ class SignUpForm(UserCreationForm):
         model = User
         fields = ('username', 'email','password1', 'password2',)
 
-        def save(self, commit=True):
-            """clean email data and save user email to the User"""
-            user = super(SignUpForm, self).save(commit=False)
-            user.email = self.cleaned_data['email']
-            if commit:
-                user.save()
-            return user
+    def clean_email(self):
+        """validate and clean email data"""
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email address has already been taken")
+        return email
+        
+    def clean_username(self):
+        """validate and clean username data"""
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("This username has already been taken")
+        return username
+
+    def save(self, commit=True):
+        """save user data to the User database"""
+        user = super(SignUpForm, self).save(commit=False)
+        if commit:
+            user.save()
+        return user
         
 
 class UserChangeForm(UserChangeForm):

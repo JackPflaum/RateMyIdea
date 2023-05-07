@@ -8,6 +8,7 @@ from django.views import View
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.contrib import messages
 
 
 def home(request):
@@ -95,12 +96,14 @@ class IdeaView(TemplateView):
                 rating_exists.idea = idea
                 rating_exists.author = self.request.user
                 rating_exists.save()
+                messages.success(request, 'You have updated your rating of this idea', extra_tags='alert-success')
             else:
                 # create new rating
                 rating = rating_form.save(commit=False)
                 rating.idea = idea
                 rating.author = self.request.user
                 rating.save()
+                messages.success(request, 'You have successfully rated this idea', extra_tags='alert-success')
         elif comment_form.is_valid() and not rating_form.is_valid():
             # only save comment form
             comment = comment_form.save(commit=False)
@@ -125,6 +128,7 @@ def new_idea(request):
             idea = form.save(commit=False)    # don't save to the database yet
             idea.author = request.user    # save the current user in the author field of the Idea model
             idea.save()    # save users idea to the database
+            messages.success(request, 'New Idea has been posted', extra_tags='alert-success')
             return redirect('ideas:home')
     else:
         form = NewIdeaForm()

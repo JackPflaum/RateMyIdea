@@ -17,6 +17,13 @@
                         </div>
                         {% render_field form.username placeholder="Username" class+="form-control" %}
                     </div>
+                    {% if form.username.errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.username.errors %}
+                                <strong>{{ error|escape }}</strong><br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="form-group">
                     <div class="input-group mb-3">
@@ -25,6 +32,13 @@
                         </div>
                         {% render_field form.email placeholder="Email" class+="form-control" %}
                     </div>
+                    {% if form.email.errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.email.errors %}
+                                <strong>{{ error|escape }}</strong><br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="form-group">
                     <div class="input-group mb-3">
