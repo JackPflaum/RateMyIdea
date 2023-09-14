@@ -2,62 +2,73 @@
 
 {% load custom_filters %}
 
-{% block title %}Idea{% endblock %}
-
 {% block content %}
 
 <div class="container">
-<div class="row d-flex justify-content-between">
-	<div>
-		<h1>{{ idea.author.username }}</h1>
-		<h5 style="text-indent: 25px;">Date: {{ idea.date_posted }}</h5>
-	</div>
-	<div class="border border-dark rounded">
-		{% if rating|is_numeric %}
-			<h5>Average Rating {{ rating|floatformat:1 }}/10</h5>
-		{% else %}
-			<p>Be the first to rate this idea</p>
-		{% endif %}
-		<form method="post">
-			{% csrf_token %}
-			{{ rating_form.as_p }}
-			{% if user_rating_value %}
-				<p class="text-success">You rated this {{ user_rating_value }}/10</p>
-			{% endif %}
-
-			{% if user.is_authenticated %}
-				<button type="submit" class="btn btn-primary">Submit</button>
+	<div class="row d-flex justify-content-between">
+		<div>
+			<h1>{{ idea.author.username }}</h1>
+			<h5 style="text-indent: 25px;">Date: {{ idea.date_posted }}</h5>
+		</div>
+		<div class="border border-dark rounded">
+			{% if rating|is_numeric %}
+				<h5>Average Rating {{ rating|floatformat:1 }}/10</h5>
 			{% else %}
-				<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
+				<p>Be the first to rate this idea</p>
 			{% endif %}
-		</form>
+			<form method="post">
+				{% csrf_token %}
+				{{ rating_form.as_p }}
+				{% if user_rating_value %}
+					<p class="text-success">You rated this {{ user_rating_value }}/10</p>
+				{% endif %}
+
+				{% if user.is_authenticated %}
+					<button type="submit" class="btn btn-primary">Submit</button>
+				{% else %}
+					<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
+				{% endif %}
+			</form>
+		</div>
 	</div>
+
+		<h5>{{ idea.title }}</h5>
+		<p class="border border-dark rounded m-3 pb-5">{{ idea.idea }}</p>
+		<h4>Comments:</h4>
+
+		{% if comments %}
+		<div>
+			{% for comment in comments %}
+			<div class="d-flex mb-2">
+				<img class="profile-image pr-2" src="#" alt="profile-avatar">
+				<div class="card">
+					<div class="card-body">
+						<div class="d-flex justify-content-between">
+							<h5 class="card-title">{{ comment.author.username }}</h5>
+							<p class="text-muted"><i class="bi bi-clock"></i> {{ comment.date_commented }}</p>
+						</div>
+						<p class="card-text">{{ comment.comment }}</p>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		{% else %}
+		<h4>Be the first to comment.</h4>
+		{% endif %}
+
+
+	<form method="post">
+		{% csrf_token %}
+		{{ comment_form.as_p }}
+
+		{% if user.is_authenticated %}
+			<button type="submit" class="btn btn-primary">Submit</button>
+		{% else %}
+			<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
+		{% endif %}
+	</form>
 </div>
-</div>
-<h5>{{ idea.title }}</h5>
-<p class="border border-dark rounded m-3 pb-5">{{ idea.idea }}</p>
-<h4>Comments:</h4>
 
-{% if comments %}
-
-	{% for comment in comments %}
-		<h5 style="text-indent: 25px;">{{ comment.author.username }} ({{ comment.date_commented }})</h5>
-		<p class="border border-dark m-3 pb-4">{{ comment.comment }}</p>
-	{% endfor %}
-
-{% else %}
-    <h4>Be the first to comment.</h4>
-{% endif %}
-
-<form method="post">
-	{% csrf_token %}
-	{{ comment_form.as_p }}
-
-	{% if user.is_authenticated %}
-		<button type="submit" class="btn btn-primary">Submit</button>
-	{% else %}
-		<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
-	{% endif %}
-</form>
 
 {% endblock %}
