@@ -1,46 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}Author{% endblock %}
-
 {% block content %}
-<h3>{{ author.user.username }}</h3>
-<p>Joined: {{ author.joined }}</p>
-<p>Ideas Published: {{ number_of_ideas_published }}</p>
-<br>
-<a href="{% url 'ideas:new_idea' %}" class="btn btn-dark">New Idea</a>
 
+<div class="container">
+    <h3>{{ author.user.username }}</h3>
+    <p>Joined: {{ author.joined }}</p>
+    <p>Ideas Published: {{ number_of_ideas_published }}</p>
+    
+    <div class="d-flex justify-content-between mb-2">
+        <h4>My Ideas</h4>
+        <a href="{% url 'ideas:new_idea' %}" class="btn btn-dark">New Idea</a>
+    </div>
+    
+    {% if ideas %}
 
-<h5>My Ideas</h5>
-<table class="table">
-    <thead class="thead-inverse text-center">
-        <tr>
-            <th>Title</th>
-            <th>Idea</th>
-            <th>Rating</th>
-            <th>Votes</th>
-            <th>Comments</th>
-            <th>Posted</th>
-         </tr>
-    </thead>
-    <tbody>
-        {% if ideas %}
-        {% for idea in ideas %}
-        <tr class="text-center">
-            <td>{{ idea.title }}</td>
-            <td>{{ idea.idea }}</td>
-            <td>{{ idea.rating }}</td>
-            <td>{{ idea.votes }}</td>
-            <td>{{ idea.comments }}</td>
-            <td>{{ idea.date_posted }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
+        {% include 'idea_card_format.html' %}
 
-<p>You have not posted any ideas</p>
-
-{% endif %}
-
+    {% else %}
+    <div class="mb-1">
+            <p class="card-text text-center"><b>You have not posted any ideas.</b></p>
+    </div>
+    {% endif %}
+</div>
 
 {% endblock %}

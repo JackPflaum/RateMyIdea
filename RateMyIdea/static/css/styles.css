@@ -1,0 +1,52 @@
+/*----------------------------Universal Styles----------------------------------------*/
+
+
+
+
+/*-------------------------------Home Page-------------------------------------*/
+.adjust-line-height {
+    line-height: 1em;
+}
+
+/*multi line text truncation*/
+.text-overflow-clamp {
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /*truncate after 2 lines*/
+    display: -webkit-box;
+}
+
+.profile-image {
+    width: auto;
+    height: 40px;
+    border-radius: 50%;
+}
+
+
+
+
+/*---------------------------------Idea Page-----------------------------------*/
+
+
+
+
+
+
+
+/*-----------------------------New Idea Page---------------------------------------*/
+
+
+
+
+
+
+
+/*-------------------------------Author Page-------------------------------------*/
+
+
+
+
+
+
+
+/*--------------------------------------------------------------------*/

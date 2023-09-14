@@ -1,50 +1,47 @@
 {% extends 'base.html' %}
 
-
-
-
-{% block title %}Rate My Idea{% endblock %}
-
 {% block content %}
-<br>
-<a href="{% url 'ideas:new_idea' %}" class="btn btn-dark">New Idea</a>
-<br>
-
 
 <div class="container">
-    <div class="row">
-        <table class="table">
-            <thead class="thead-inverse text-center">
-                <tr>
-                    <th>Title</th>
-                    <th>Idea</th>
-                    <th>Average Rating</th>
-                    <th>Votes</th>
-                    <th>Author</th>
-                    <th>Date Posted</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if ideas %}
-                {% for idea in ideas %}
-                <tr class="text-center">
-                    <td><a href="{% url 'ideas:idea' idea.slug %}">{{ idea.title }}</a></td>
-                    <td>{{ idea.idea }}</td>
-                    {% if idea.average_rating %}
-                        <td>{{ idea.average_rating|floatformat:1 }}</td>
-                    {% else %}
-                        <td>Not Rated</td>
-                    {% endif %}
-                    <td>{{ idea.votes }}</td>
-                    <td><a href="{% url 'ideas:author' idea.author.username %}">{{ idea.author.username }}</a></td>
-                    <td>{{ idea.date_posted }}</td>
-                </tr>
-                {% endfor %}
-                {% else %}
-                <p>There are curently no ideas to rate. Click on 'New Idea' to add one</p>
-                {% endif %}
-            </tbody>
-        </table>
+    <a href="{% url 'ideas:new_idea' %}" class="btn btn-dark mt-3 mb-2">New Idea</a>
+    <div class="row d-flex">
+        <div class="col-md-10 col-sm-12">
+            {% if ideas %}
+            {% for idea in ideas %}
+            <div class="card mb-1">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h2 class="card-title"><a href="{% url 'ideas:idea' idea.slug %}">{{ idea.title }}</a></h2>
+                        <h6>Rating: {{ idea.average_rating }}/10</h6>
+                    </div>
+                    <p class="card-text text-overflow-clamp">{{ idea.idea }}</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <a class="text-muted d-flex" href="{% url 'ideas:author' idea.author.username %}">
+                            <img class="profile-image" src="" alt="profile-avatar">
+                            <p>{{ idea.author.username }} ({{ idea.date_posted }})</p>
+                        </a>
+                        <div class="adjust-line-height">
+                            <p>5 comments <i class="bi bi-chat"></i></p>
+                            <p>{{ idea.votes }} votes <i class="bi bi-bar-chart"></i></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="card mb-1">
+                <div class="card-body">
+                    <p class="card-text">There are curently no ideas to rate. Click on 'New Idea' to add one</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-2 col-sm-12">
+            <h4>Topics</h4>
+            <div class="d-flex">
+                <a href="#" ><i class="bi bi-plus"></i>Idea</a>
+            </div>
+        </div>
     </div>
 </div>
 
