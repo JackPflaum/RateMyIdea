@@ -19,7 +19,9 @@ def home(request):
     # idea_rating is the related name, meaning the reverse relationship from Idea to Rating.
     # idea_rating__rating is a field lookup that traverses the reverse relationship and accesses the
     # rating field of Rating model.
-    ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating'), votes=Count('idea_rating__rating'))
+    ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating',),
+                                             votes=Count('idea_rating__rating'),
+                                             number_of_comments=Count('idea_comments__comment')).order_by('-date_posted')
 
     # ideas per page from Idea model
     paginator = Paginator(ideas_list, 20)
@@ -146,7 +148,11 @@ def contact(request):
 def author(request, slug):
     """author profile page showing previous ideas that have been posted"""
     author = Author.objects.get(slug=slug)
-    ideas = Idea.objects.filter(author=author.user)
+    ideas = Idea.objects.filter(author=author.user).order_by('-date_posted')
     number_of_ideas_published = Idea.objects.filter(author=author.user).count()
     context = {'author': author, 'ideas': ideas, 'number_of_ideas_published': number_of_ideas_published}
     return render(request, 'author.html', context)
+
+def update_profile(request, slug):
+    context ={}
+    return render(request, 'update_profile.html', context)
