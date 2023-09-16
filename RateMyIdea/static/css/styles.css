@@ -1,6 +1,33 @@
 /*----------------------------Universal Styles----------------------------------------*/
+body {
+    background-color: #F4F1DE;
+}
+
+a {
+    text-decoration: none;
+    color: red;
+}
+
+a:hover {
+    text-decoration: none;
+    color: purple;
+}
+
+.custom-btn {
+    background-color: #3D405B;
+    color: black;
+}
+
+.custom-btn:hover {
+    background-color: blue;
+    transition: 0.5s;
+}
 
 
+/*-------------------------------Navigation bar-------------------------------------*/
+.navbar-custom {
+    background-color: #3D405B;
+}
 
 
 /*-------------------------------Home Page-------------------------------------*/
@@ -27,6 +54,9 @@
 
 /*---------------------------------Idea Page-----------------------------------*/
 
+.date-indent {
+    text-indent: 25px;
+}
 
 
 
