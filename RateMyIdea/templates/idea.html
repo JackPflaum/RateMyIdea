@@ -1,51 +1,58 @@
 {% extends 'base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% load custom_filters %}
 
 {% block content %}
 
 <div class="container">
-	<div class="row d-flex justify-content-between">
+	<div class="row d-flex justify-content-between mt-3">
 		<div>
-			<h1>{{ idea.author.username }}</h1>
-			<h5 style="text-indent: 25px;">Date: {{ idea.date_posted }}</h5>
+			<a href="{% url 'ideas:author' idea.author.username %}" class="d-flex">
+				<img class="profile-image" src="" alt="profile-avatar">
+				<h3>{{ idea.author.username }}</h3>
+			</a>
+			<p class="text-indent text-muted">{{ idea.date_posted }}</p>
 		</div>
 		<div class="border border-dark rounded">
 			{% if rating|is_numeric %}
-				<h5>Average Rating {{ rating|floatformat:1 }}/10</h5>
+				<h5>Rating {{ rating|floatformat:1 }}/10</h5>
 			{% else %}
 				<p>Be the first to rate this idea</p>
 			{% endif %}
 			<form method="post">
 				{% csrf_token %}
-				{{ rating_form.as_p }}
+				{{ rating_form|crispy }}
 				{% if user_rating_value %}
 					<p class="text-success">You rated this {{ user_rating_value }}/10</p>
 				{% endif %}
 
 				{% if user.is_authenticated %}
-					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="submit" class="btn custom-btn">Submit</button>
 				{% else %}
-					<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
+					<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn custom-btn">Login</a>
 				{% endif %}
 			</form>
 		</div>
 	</div>
 
-		<h5>{{ idea.title }}</h5>
-		<p class="border border-dark rounded m-3 pb-5">{{ idea.idea }}</p>
-		<h4>Comments:</h4>
-
+	<h4>{{ idea.title }}</h4>
+	<p class="pb-3">{{ idea.idea }}</p>
+	<h5>Comments:</h5>
+	<div class="row">
 		{% if comments %}
-		<div>
+		<div class="col-lg-12">
 			{% for comment in comments %}
 			<div class="d-flex mb-2">
-				<img class="profile-image pr-2" src="#" alt="profile-avatar">
-				<div class="card">
+				<img class="profile-image pr-2" src="https://images3.alphacoders.com/690/thumb-1920-690494.jpg" alt="profile-avatar">
+				<div class="card w-100">
 					<div class="card-body">
 						<div class="d-flex justify-content-between">
-							<h5 class="card-title">{{ comment.author.username }}</h5>
-							<p class="text-muted"><i class="bi bi-clock"></i> {{ comment.date_commented }}</p>
+							<a href="#">
+								<h5 class="card-title">{{ comment.author.username }}</h5>
+							</a>
+							<p class="text-muted"><i class="bi bi-clock"></i> {{ comment.date_commented|timesince }} ago</p>
 						</div>
 						<p class="card-text">{{ comment.comment }}</p>
 					</div>
@@ -54,20 +61,25 @@
 			{% endfor %}
 		</div>
 		{% else %}
-		<h4>Be the first to comment.</h4>
+		<div class="col-lg-12">
+			<p class="text-indent">Be the first to comment.</p>
+		</div>
 		{% endif %}
+	</div>
+	<div class="row">
+		<form method="post" class="col-lg-12">
+			{% csrf_token %}
+			{{ comment_form|crispy }}
+	
+			{% if user.is_authenticated %}
+				<button type="submit" class="btn custom-btn">Submit</button>
+			{% else %}
+				<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn custom-btn">Login</a>
+			{% endif %}
+		</form>
 
+	</div>
 
-	<form method="post">
-		{% csrf_token %}
-		{{ comment_form.as_p }}
-
-		{% if user.is_authenticated %}
-			<button type="submit" class="btn btn-primary">Submit</button>
-		{% else %}
-			<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
-		{% endif %}
-	</form>
 </div>
 
 
