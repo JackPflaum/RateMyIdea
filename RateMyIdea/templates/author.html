@@ -3,13 +3,21 @@
 {% block content %}
 
 <div class="container">
-    <h3>{{ author.user.username }}</h3>
-    <p>Joined: {{ author.joined }}</p>
-    <p>Ideas Published: {{ number_of_ideas_published }}</p>
+    <div class="d-flex justify-content-between mt-4 mb-4">
+        <a href="#" class="d-flex">
+            <img class="profile-image" src="https://images3.alphacoders.com/690/thumb-1920-690494.jpg" alt="profile-avatar">
+            <h3>{{ author.user.username }}</h3>
+        </a>
+        <div class="line-spacing">
+            <p><b>Joined:</b> {{ author.joined }}</p>
+            <p><b>Ideas Published:</b> {{ number_of_ideas_published }}</p>
+        </div>
+    </div>
+
     
     <div class="d-flex justify-content-between mb-2">
         <h4>My Ideas</h4>
-        <a href="{% url 'ideas:new_idea' %}" class="btn btn-dark">New Idea</a>
+        <a href="{% url 'ideas:new_idea' %}" class="btn custom-btn">New Idea</a>
     </div>
     
     {% if ideas %}
