@@ -12,13 +12,17 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
                         <h2 class="card-title"><a href="{% url 'ideas:idea' idea.slug %}">{{ idea.title }}</a></h2>
-                        <h6>Rating: {{ idea.average_rating }}/10</h6>
+                        {% if idea.average_rating %}
+                            <h6>Rating: {{ idea.average_rating|floatformat:1 }}/10</h6>
+                        {% else %}
+                            <h6>Rating: -/10</h6>
+                        {% endif %} 
                     </div>
                     <p class="card-text text-overflow-clamp">{{ idea.idea }}</p>
                     <div class="d-flex align-items-center justify-content-between">
                         <a class="text-muted d-flex" href="{% url 'ideas:author' idea.author.username %}">
                             <img class="profile-image" src="" alt="profile-avatar">
-                            <p>{{ idea.author.username }} ({{ idea.date_posted }})</p>
+                            <p>{{ idea.author.username }} ({{ idea.date_posted|timesince }} ago)</p>
                         </a>
                         <div class="adjust-line-height">
                             <p>5 comments <i class="bi bi-chat"></i></p>
