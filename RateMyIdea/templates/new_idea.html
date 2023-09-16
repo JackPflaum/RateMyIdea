@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}New Idea{% endblock %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
-<form method="post">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<button type="submit" class="btn btn-primary">Submit</button>
-	<a href="{% url 'ideas:home' %}" class="btn btn-secondary">Cancel</a>
-</form>
+<div class="container">
+	<h2>New Idea</h2>
+	<form method="post" class="mt-4">
+		{% csrf_token %}
+		{{ form|crispy }}
+		<button type="submit" class="btn custom-btn">Submit</button>
+		<a href="{% url 'ideas:home' %}" class="btn btn-secondary">Cancel</a>
+	</form>
+</div>
 
 {% endblock %}
