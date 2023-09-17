@@ -29,9 +29,9 @@
 				{% endif %}
 
 				{% if user.is_authenticated %}
-					<button type="submit" class="btn custom-btn">Submit</button>
+					<button type="submit" class="btn btn-primary">Submit</button>
 				{% else %}
-					<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn custom-btn">Login</a>
+					<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
 				{% endif %}
 			</form>
 		</div>
@@ -72,9 +72,9 @@
 			{{ comment_form|crispy }}
 	
 			{% if user.is_authenticated %}
-				<button type="submit" class="btn custom-btn">Submit</button>
+				<button type="submit" class="btn btn-primary">Submit</button>
 			{% else %}
-				<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn custom-btn">Login</a>
+				<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
 			{% endif %}
 		</form>
 
