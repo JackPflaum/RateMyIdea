@@ -1,27 +1,33 @@
-<div class="row d-flex">
-    {% if ideas %}
-    <div>
-        {% for idea in ideas %}
-        <div class="card mb-1">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between">
-                    <h2 class="card-title"><a href="{% url 'ideas:idea' idea.slug %}">{{ idea.title }}</a></h2>
-                    <h6>Rating: {{ idea.average_rating }}/10</h6>
-                </div>
-                <p class="card-text text-overflow-clamp">{{ idea.idea }}</p>
-                <div class="d-flex align-items-center justify-content-between">
-                    <a class="text-muted d-flex" href="{% url 'ideas:author' idea.author.username %}">
-                        <img class="profile-image" src="" alt="profile-avatar">
-                        <p>{{ idea.author.username }} ({{ idea.date_posted }})</p>
-                    </a>
-                    <div class="adjust-line-height">
-                        <p>{{ idea.number_of_comments }} comments <i class="bi bi-chat"></i></p>
-                        <p>{{ idea.votes }} votes <i class="bi bi-bar-chart"></i></p>
+{% if ideas %}
+    {% for idea in ideas %}
+    <div class="card mb-2">
+        <div class="card-body p-2 p-sm-3">
+            <div class="media forum-item">
+                <a href="{% url 'ideas:author' idea.author.username %}" data-toggle="collapse" data-target=".forum-content">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="mr-3 rounded-circle" width="50" alt="User"/>
+                </a>
+                <div class="media-body">
+                    <div class="d-flex justify-content-between">
+                        <h6><a href="{% url 'ideas:idea' idea.slug %}" class="text-body">{{ idea.title }}</a></h6>
+                        {% if idea.average_rating %}
+                            <p>Rating: {{ idea.average_rating|floatformat:1 }}/10</p>
+                        {% else %}
+                            <p>Rating: -/10</p>
+                        {% endif %} 
                     </div>
+                        <p class="text-secondary">
+                            {{ idea.idea }}
+                        </p>
+                        <p class="text-muted">
+                            <a href="{% url 'ideas:author' idea.author.username %}">{{ idea.author.username }}</a> published <span class="text-secondary font-weight-bold">{{ idea.date_posted|timesince }} ago</span>
+                        </p>
+                </div>
+                <div class="text-muted small text-center align-self-center">
+                    <span class="d-none d-sm-inline-block"><i class="bi bi-bar-chart"></i> {{ idea.votes }}</span>
+                    <span><i class="bi bi-chat ml-2"></i> 3</span>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
-    {% endif %}
-</div>
+    {% endfor %}
+{% endif %}
