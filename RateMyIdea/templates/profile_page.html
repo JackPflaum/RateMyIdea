@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+       <div class="col-md-12">
+          <div id="content" class="content content-full-width">
+             <!-- begin profile -->
+             <div class="profile">
+                <div class="profile-header">
+                   <!-- BEGIN profile-header-cover -->
+                   <div class="profile-header-cover"></div>
+                   <!-- END profile-header-cover -->
+                   <!-- BEGIN profile-header-content -->
+                   <div class="profile-header-content">
+                      <!-- BEGIN profile-header-img -->
+                      <div class="profile-header-img">
+                         <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
+                      </div>
+                      <!-- END profile-header-img -->
+                      <!-- BEGIN profile-header-info -->
+                      <div class="profile-header-info">
+                         <h4 class="m-t-10 m-b-5">{{ author.user.username }}</h4>
+                         <p class="m-b-10">Ideas Published: {{ number_of_ideas_published }}</p>
+                         <a href="{% url 'ideas:edit_profile' author.user.username %}" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                      </div>
+                      <!-- END profile-header-info -->
+                   </div>
+                   <!-- END profile-header-content -->
+                   <!-- BEGIN profile-header-tab -->
+                   <ul class="profile-header-tab nav nav-tabs">
+                      <li class="nav-item"><a href="#" target="__blank" class="nav-link_">POSTS</a></li>
+                      <li class="nav-item"><a href="#" target="__blank" class="nav-link_">ABOUT</a></li>
+                      <li class="nav-item"><a href="#" target="__blank" class="nav-link_">PHOTOS</a></li>
+                      <li class="nav-item"><a href="#" target="__blank" class="nav-link_">VIDEOS</a></li>
+                      <li class="nav-item"><a href="#" target="__blank" class="nav-link_ active show">FRIENDS</a></li>
+                   </ul>
+                   <!-- END profile-header-tab -->
+                </div>
+             </div>
+             <!-- end profile -->
+             <!-- begin profile-content -->
+             <div class="profile-content">
+                <!-- begin tab-content -->
+                <div class="tab-content p-0">
+                   <!-- begin #profile-post tab -->
+                   <div class="tab-pane fade active show" id="profile-post">
+                      <!-- begin timeline -->
+                      <ul class="timeline">
+                        {% if ideas %}
+                        {% for idea in ideas %}
+                         <li>
+                            <!-- begin timeline-time -->
+                            <div class="timeline-time">
+                               <span class="date">{{ idea.date_posted }}</span>
+                               <span class="time">04:20</span>
+                            </div>
+                            <!-- end timeline-time -->
+                            <!-- begin timeline-icon -->
+                            <div class="timeline-icon">
+                               <a href="javascript:;">&nbsp;</a>
+                            </div>
+                            <!-- end timeline-icon -->
+                            <!-- begin timeline-body -->
+                            <div class="timeline-body">
+                               <div class="timeline-header d-flex justify-content-between">
+                                <div>
+                                    <span class="userimage"><img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt=""></span>
+                                    <span class="username"><a href="{% url 'ideas:idea' idea.slug %}">{{ idea.title }}</a> <small></small></span>
+                                </div>
+                                    <span class="pull-right text-muted">
+                                    {% if idea.average_rating %}
+                                        Rating: {{ idea.average_rating|floatformat:1 }}
+                                    {% else %}
+                                        Rating: -/10
+                                    {% endif %}
+                                    </span>
+                               </div>
+                               <div class="timeline-content">
+                                  <p>
+                                     {{ idea.idea }}
+                                  </p>
+                               </div>
+                               <div class="timeline-likes">
+                                  <div class="stats-right">
+                                    <span class="stats-text">{{ idea.votes }} Votes</span>
+                                     <span class="stats-text">{{ idea.comments }} Comments</span>
+                                  </div>
+                                  <div class="stats">
+                                     <span class="fa-stack fa-fw stats-icon">
+                                     <i class="fa fa-circle fa-stack-2x text-danger"></i>
+                                     <i class="fa fa-heart fa-stack-1x fa-inverse t-plus-1"></i>
+                                     </span>
+                                     <span class="fa-stack fa-fw stats-icon">
+                                     <i class="fa fa-circle fa-stack-2x text-primary"></i>
+                                     <i class="fa fa-thumbs-up fa-stack-1x fa-inverse"></i>
+                                     </span>
+                                     <span class="stats-total">4.3k</span>
+                                  </div>
+                               </div>
+
+                            </div>
+                            <!-- end timeline-body -->
+                         </li>
+                         {% endfor %}
+                         {% endif %}
+                         <li>
+                            <!-- begin timeline-icon -->
+                            <div class="timeline-icon">
+                               <a href="javascript:;">&nbsp;</a>
+                            </div>
+                            <!-- end timeline-icon -->
+                            <!-- begin timeline-body -->
+                            <div class="timeline-body">
+                               Loading...
+                            </div>
+                            <!-- begin timeline-body -->
+                         </li>
+                      </ul>
+                      <!-- end timeline -->
+                   </div>
+                   <!-- end #profile-post tab -->
+                </div>
+                <!-- end tab-content -->
+             </div>
+             <!-- end profile-content -->
+          </div>
+       </div>
+    </div>
+ </div>
+
+{% endblock %}

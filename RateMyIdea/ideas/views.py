@@ -22,14 +22,14 @@ def home(request):
     ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating',),
                                              votes=Count('idea_rating__rating'),
                                              number_of_comments=Count('idea_comments__comment')).order_by('-date_posted')
-
     # ideas per page from Idea model
     paginator = Paginator(ideas_list, 20)
 
     # retrieve page number
     page = request.GET.get('page')
     ideas = paginator.get_page(page)
-    context = {'ideas': ideas}
+    form = NewIdeaForm()
+    context = {'ideas': ideas, 'form': form}
     return render(request, 'home.html', context)
 
 
@@ -134,7 +134,8 @@ def new_idea(request):
             return redirect('ideas:home')
     else:
         form = NewIdeaForm()
-    return render(request, 'new_idea.html', {'form': form})
+        return render(request, 'new_idea.html', {'form': form})
+
 
 
 def about(request):
@@ -148,11 +149,18 @@ def contact(request):
 def author(request, slug):
     """author profile page showing previous ideas that have been posted"""
     author = Author.objects.get(slug=slug)
-    ideas = Idea.objects.filter(author=author.user).order_by('-date_posted')
-    number_of_ideas_published = Idea.objects.filter(author=author.user).count()
+    ideas = Idea.objects.filter(author=author.user).annotate(average_rating=Avg('idea_rating__rating'),
+                                                             votes=Count('idea_rating__rating'),
+                                                             comments=Count('idea_comments__comment')).order_by('-date_posted')
+    number_of_ideas_published = ideas.count()
+    #need to get the ideas of the author and maybe loop over each idea to count number of comments.
+    # then put into dictionary query or something?
+    # number_of_comments = Comment.objects.filter()
     context = {'author': author, 'ideas': ideas, 'number_of_ideas_published': number_of_ideas_published}
-    return render(request, 'author.html', context)
+    return render(request, 'profile_page.html', context)
 
-def update_profile(request, slug):
+
+def edit_profile(request, slug):
+    """update author profile with the ability to change avatar, add about info, update password and delete account"""
     context ={}
-    return render(request, 'update_profile.html', context)
+    return render(request, 'edit_profile.html', context)
