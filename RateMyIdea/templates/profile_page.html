@@ -51,7 +51,7 @@
                       <!-- begin timeline -->
                       <ul class="timeline">
                         {% if ideas %}
-                        {% for idea in ideas %}
+                        {% for idea, number_of_votes, number_of_comments in ideas %}
                          <li>
                             <!-- begin timeline-time -->
                             <div class="timeline-time">
@@ -73,9 +73,9 @@
                                 </div>
                                     <span class="pull-right text-muted">
                                     {% if idea.average_rating %}
-                                        Rating: {{ idea.average_rating|floatformat:1 }}
+                                       Rating: {{ idea.average_rating|floatformat:1 }}
                                     {% else %}
-                                        Rating: -/10
+                                       Rating: -/10
                                     {% endif %}
                                     </span>
                                </div>
@@ -86,8 +86,8 @@
                                </div>
                                <div class="timeline-likes">
                                   <div class="stats-right">
-                                    <span class="stats-text">{{ idea.votes }} Votes</span>
-                                     <span class="stats-text">{{ idea.comments }} Comments</span>
+                                    <span class="stats-text">{{ number_of_votes }} Votes</span>
+                                     <span class="stats-text">{{ number_of_comments }} Comments</span>
                                   </div>
                                   <div class="stats">
                                      <span class="fa-stack fa-fw stats-icon">
@@ -98,7 +98,11 @@
                                      <i class="fa fa-circle fa-stack-2x text-primary"></i>
                                      <i class="fa fa-thumbs-up fa-stack-1x fa-inverse"></i>
                                      </span>
-                                     <span class="stats-total">4.3k</span>
+                                     {% if request.user.is_authenticated %}
+                                       <button class="btn btn-danger-soft text-danger" type="button">delete</button>
+                                     {% else %}
+                                       <span class="stats-total"></span>
+                                     {% endif %}
                                   </div>
                                </div>
 

@@ -148,15 +148,29 @@ def contact(request):
 
 def author(request, slug):
     """author profile page showing previous ideas that have been posted"""
-    author = Author.objects.get(slug=slug)
-    ideas = Idea.objects.filter(author=author.user).annotate(average_rating=Avg('idea_rating__rating'),
-                                                             votes=Count('idea_rating__rating'),
-                                                             comments=Count('idea_comments__comment')).order_by('-date_posted')
+    author = get_object_or_404(Author, slug=slug)
+    ideas = Idea.objects.filter(author=author.user).annotate(average_rating=Avg('idea_rating__rating'))    
+
+    ideas_list = list(ideas)
+    
+    # get number of user votes for each idea
+    number_of_votes = []
+    for idea in ideas:
+        rating_query_set = Rating.objects.filter(idea=idea).aggregate(votes=Count('rating'))
+        number_of_votes.append(rating_query_set['votes'])
+
+    # get number of comments for each idea
+    number_of_comments = []
+    for idea in ideas:
+        comment_query_set = Comment.objects.filter(idea=idea).aggregate(comments=Count('comment'))
+        number_of_comments.append(comment_query_set['comments'])
+
+    combined_data_set = zip(ideas_list, number_of_votes, number_of_comments)
+
+    # number of ideas the user has published
     number_of_ideas_published = ideas.count()
-    #need to get the ideas of the author and maybe loop over each idea to count number of comments.
-    # then put into dictionary query or something?
-    # number_of_comments = Comment.objects.filter()
-    context = {'author': author, 'ideas': ideas, 'number_of_ideas_published': number_of_ideas_published}
+
+    context = {'author': author, 'ideas': combined_data_set, 'number_of_ideas_published': number_of_ideas_published}
     return render(request, 'profile_page.html', context)
 
 
