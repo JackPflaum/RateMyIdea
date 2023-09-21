@@ -174,7 +174,15 @@ def author(request, slug):
     return render(request, 'profile_page.html', context)
 
 
-def edit_profile(request, slug):
-    """update author profile with the ability to change avatar, add about info, update password and delete account"""
+@login_required
+def edit_profile(request):
+    """update author profile with the ability to change avatar and about info"""
     context ={}
     return render(request, 'edit_profile.html', context)
+
+
+@login_required
+def profile_security(request, slug):
+    """allows user to change their password and delete their account"""
+    user = get_object_or_404(Author, slug=slug)
+    return render(request, 'profile_security.html', {})

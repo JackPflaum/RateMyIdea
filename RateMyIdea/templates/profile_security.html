@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-xl px-4 mt-4">
+    <!-- Account page navigation-->
+    <nav class="nav nav-borders">
+    <a class="nav-link active ms-0" href="https://www.bootdey.com/snippets/view/bs5-edit-profile-account-details" target="__blank">Profile</a>
+    <a class="nav-link" href="#">Edit Profile</a>
+    <a class="nav-link" href="#">Security</a>
+    </nav>
+    <hr class="mt-0 mb-4">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Change password card-->
+            <div class="card mb-4">
+                <div class="card-header">Change Password</div>
+                <div class="card-body">
+                    <form>
+                        <!-- Form Group (current password)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="currentPassword">Current Password</label>
+                            <input class="form-control" id="currentPassword" type="password" placeholder="Enter current password">
+                        </div>
+                        <!-- Form Group (new password)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="newPassword">New Password</label>
+                            <input class="form-control" id="newPassword" type="password" placeholder="Enter new password">
+                        </div>
+                        <!-- Form Group (confirm password)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="confirmPassword">Confirm Password</label>
+                            <input class="form-control" id="confirmPassword" type="password" placeholder="Confirm new password">
+                        </div>
+                        <button class="btn btn-primary" type="button">Save</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Security preferences card-->
+            <div class="card mb-4">
+                <div class="card-header">Security Preferences</div>
+                <div class="card-body">
+                    <!-- Account privacy optinos-->
+                    <h5 class="mb-1">Account Privacy</h5>
+                    <p class="small text-muted">By setting your account to private, your profile information and posts will not be visible to users outside of your user groups.</p>
+                    <form>
+                        <div class="form-check">
+                            <input class="form-check-input" id="radioPrivacy1" type="radio" name="radioPrivacy" checked="">
+                            <label class="form-check-label" for="radioPrivacy1">Public (posts are available to all users)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" id="radioPrivacy2" type="radio" name="radioPrivacy">
+                            <label class="form-check-label" for="radioPrivacy2">Private (posts are available to only users in your groups)</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <!-- Delete account card-->
+            <div class="card mb-4">
+                <div class="card-header">Delete Account</div>
+                <div class="card-body">
+                    <p>Deleting your account is a permanent action and cannot be undone. If you are sure you want to delete your account, select the button below.</p>
+                    <button class="btn btn-danger-soft text-danger" type="button" data-toggle="modal" data-target="#deleteModal">
+                    I understand, delete my account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Delete account Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="threadModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form method='post'>
+                    {% csrf_token %}
+                    <div class="modal-header d-flex align-items-center bg-primary text-white">
+                        <h6 class="modal-title mb-0" id="threadModalLabel">Delete Account</h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                            <!-- Modal message -->
+                            <div class="form-group">
+                                Please confirm the deletion of your account by clicking the button below. Thank you for posting your ideas on our website. You can still continue to view other users posts in the future.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary">Permanently Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
