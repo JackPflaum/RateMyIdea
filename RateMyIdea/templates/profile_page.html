@@ -23,9 +23,11 @@
                       <!-- END profile-header-img -->
                       <!-- BEGIN profile-header-info -->
                       <div class="profile-header-info">
-                         <h4 class="m-t-10 m-b-5">{{ author.user.username }}</h4>
-                         <p class="m-b-10">Ideas Published: {{ number_of_ideas_published }}</p>
-                         <a href="{% url 'ideas:edit_profile' author.user.username %}" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                        <h4 class="m-t-10 m-b-5">{{ author.user.username }}</h4>
+                        <p class="m-b-10">Ideas Published: {{ number_of_ideas_published }}</p>
+                        {% if request.user.is_authenticated and request.user == author.user %}
+                           <a href="{% url 'ideas:edit_profile' author.user.username %}" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                        {% endif %}
                       </div>
                       <!-- END profile-header-info -->
                    </div>
@@ -98,7 +100,7 @@
                                      <i class="fa fa-circle fa-stack-2x text-primary"></i>
                                      <i class="fa fa-thumbs-up fa-stack-1x fa-inverse"></i>
                                      </span>
-                                     {% if request.user.is_authenticated %}
+                                     {% if request.user.is_authenticated and request.user == author.user %}
                                        <button class="btn btn-danger-soft text-danger" type="button">delete</button>
                                      {% else %}
                                        <span class="stats-total"></span>
