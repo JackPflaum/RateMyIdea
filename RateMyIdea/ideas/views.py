@@ -3,12 +3,13 @@ from django.core.paginator import Paginator
 from .models import Idea, Comment, Rating
 from users.models import Author
 from django.db.models import Sum, Avg, Count
-from .forms import NewIdeaForm, CommentForm, RatingForm
+from ideas.forms import NewIdeaForm, CommentForm, RatingForm
 from django.views import View
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from django.contrib.auth import logout
 
 
 def get_number_of_votes(ideas):
@@ -196,7 +197,7 @@ def author(request, slug):
 
 
 @login_required
-def edit_profile(request):
+def edit_profile(request, slug):
     """update author profile with the ability to change avatar and about info"""
     context ={}
     return render(request, 'edit_profile.html', context)
@@ -207,3 +208,18 @@ def profile_security(request, slug):
     """allows user to change their password and delete their account"""
     user = get_object_or_404(Author, slug=slug)
     return render(request, 'profile_security.html', {})
+
+
+@login_required
+def delete_account(request):
+    """users can delete their account permanently"""
+    if request.method == 'POST':
+        user = request.user
+        # logout before deleting account
+        logout(user)
+        user.delete()
+        return redirect('ideas:home')
+    
+    return redirect('ideas:home')
+
+        
