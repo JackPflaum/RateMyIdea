@@ -1,21 +1,21 @@
 {% if ideas %}
-    {% for idea in ideas %}
+    {% for idea, number_of_votes, number_of_comments in ideas %}
     <div class="card mb-2">
         <div class="card-body p-2 p-sm-3">
             <div class="media forum-item">
-                <a href="{% url 'ideas:author' idea.author.username %}" data-toggle="collapse" data-target=".forum-content">
+                <a href="{% url 'ideas:author' idea.author.username %}">
                     <img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="mr-3 rounded-circle" width="50" alt="User"/>
                 </a>
                 <div class="media-body">
                     <div class="d-flex justify-content-between">
-                        <h6><a href="{% url 'ideas:idea' idea.slug %}" class="text-body">{{ idea.title }}</a></h6>
+                        <h5><a href="{% url 'ideas:idea' idea.slug %}" class="text-body">{{ idea.title }}</a></h5>
                         {% if idea.average_rating %}
                             <p>Rating: {{ idea.average_rating|floatformat:1 }}/10</p>
                         {% else %}
                             <p>Rating: -/10</p>
                         {% endif %} 
                     </div>
-                        <p class="text-secondary">
+                        <p class="text-secondary text-overflow-clamp">
                             {{ idea.idea }}
                         </p>
                         <p class="text-muted">
@@ -23,8 +23,8 @@
                         </p>
                 </div>
                 <div class="text-muted small text-center align-self-center">
-                    <span class="d-none d-sm-inline-block"><i class="bi bi-bar-chart"></i> {{ idea.votes }}</span>
-                    <span><i class="bi bi-chat ml-2"></i> 3</span>
+                    <span class="d-none d-sm-inline-block"><i class="bi bi-bar-chart"></i> {{ number_of_votes }}</span>
+                    <span><i class="bi bi-chat ml-2"></i> {{ number_of_comments }}</span>
                 </div>
             </div>
         </div>

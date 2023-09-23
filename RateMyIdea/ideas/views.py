@@ -11,6 +11,23 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 
 
+def get_number_of_votes(ideas):
+    """get the number of users who rated each idea"""
+    number_of_votes = []
+    for idea in ideas:
+        rating_query_set = Rating.objects.filter(idea=idea).aggregate(votes=Count('rating'))
+        number_of_votes.append(rating_query_set['votes'])
+    return number_of_votes
+
+def get_number_of_comments(ideas):
+    """get the number of user comments for each idea"""
+    number_of_comments = []
+    for idea in ideas:
+        comment_query_set = Comment.objects.filter(idea=idea).aggregate(comments=Count('comment'))
+        number_of_comments.append(comment_query_set['comments'])
+    return number_of_comments
+
+
 def home(request):
     """home page showing most recent ideas posted by users"""
     # annotate query_set method allows you to add new fields to an instance in a query_set based on values
@@ -19,17 +36,25 @@ def home(request):
     # idea_rating is the related name, meaning the reverse relationship from Idea to Rating.
     # idea_rating__rating is a field lookup that traverses the reverse relationship and accesses the
     # rating field of Rating model.
-    ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating',),
-                                             votes=Count('idea_rating__rating'),
-                                             number_of_comments=Count('idea_comments__comment')).order_by('-date_posted')
+    ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating')).order_by('-date_posted')
+                                             
     # ideas per page from Idea model
     paginator = Paginator(ideas_list, 20)
 
     # retrieve page number
     page = request.GET.get('page')
     ideas = paginator.get_page(page)
+    ideas_list = list(ideas)
+
+    number_of_votes = get_number_of_votes(ideas_list)
+
+    number_of_comments = get_number_of_comments(ideas_list)
+
+    # combine data into one set for easier access in template
+    combined_data_set = zip(ideas_list, number_of_votes, number_of_comments)
+
     form = NewIdeaForm()
-    context = {'ideas': ideas, 'form': form}
+    context = {'ideas': combined_data_set, 'form': form}
     return render(request, 'home.html', context)
 
 
@@ -148,23 +173,19 @@ def contact(request):
 
 def author(request, slug):
     """author profile page showing previous ideas that have been posted"""
+    # get author and their ideas
     author = get_object_or_404(Author, slug=slug)
-    ideas = Idea.objects.filter(author=author.user).annotate(average_rating=Avg('idea_rating__rating'))    
+    ideas = Idea.objects.filter(author=author.user).annotate(average_rating=Avg('idea_rating__rating')).order_by('-date_posted')
 
     ideas_list = list(ideas)
     
     # get number of user votes for each idea
-    number_of_votes = []
-    for idea in ideas:
-        rating_query_set = Rating.objects.filter(idea=idea).aggregate(votes=Count('rating'))
-        number_of_votes.append(rating_query_set['votes'])
+    number_of_votes = get_number_of_votes(ideas)
 
     # get number of comments for each idea
-    number_of_comments = []
-    for idea in ideas:
-        comment_query_set = Comment.objects.filter(idea=idea).aggregate(comments=Count('comment'))
-        number_of_comments.append(comment_query_set['comments'])
+    number_of_comments = get_number_of_comments(ideas)
 
+    # combine data into one set for easier access in template
     combined_data_set = zip(ideas_list, number_of_votes, number_of_comments)
 
     # number of ideas the user has published
