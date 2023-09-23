@@ -26,7 +26,7 @@
                         <h4 class="m-t-10 m-b-5">{{ author.user.username }}</h4>
                         <p class="m-b-10">Ideas Published: {{ number_of_ideas_published }}</p>
                         {% if request.user.is_authenticated and request.user == author.user %}
-                           <a href="{% url 'ideas:edit_profile' author.user.username %}" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                           <a href="{% url 'ideas:edit_profile' request.user.username %}" class="btn btn-sm btn-info mb-2">Edit Profile</a>
                         {% endif %}
                       </div>
                       <!-- END profile-header-info -->
@@ -34,11 +34,13 @@
                    <!-- END profile-header-content -->
                    <!-- BEGIN profile-header-tab -->
                    <ul class="profile-header-tab nav nav-tabs">
-                      <li class="nav-item"><a href="#" target="__blank" class="nav-link_">POSTS</a></li>
-                      <li class="nav-item"><a href="#" target="__blank" class="nav-link_">ABOUT</a></li>
-                      <li class="nav-item"><a href="#" target="__blank" class="nav-link_">PHOTOS</a></li>
-                      <li class="nav-item"><a href="#" target="__blank" class="nav-link_">VIDEOS</a></li>
-                      <li class="nav-item"><a href="#" target="__blank" class="nav-link_ active show">FRIENDS</a></li>
+                      <li class="nav-item"><a href="#" class="nav-link_">POSTS</a></li>
+                      <li class="nav-item"><a href="#" class="nav-link_">ABOUT</a></li>
+                      {% if request.user.is_authenticated and request.user == author.user %}
+                        <li class="nav-item"><a href=" {% url 'ideas:profile_security' request.user.username %}" class="nav-link_">SECURITY</a></li>
+                      {% endif %}
+                      <li class="nav-item"><a href="#" class="nav-link_">VIDEOS</a></li>
+                      <li class="nav-item"><a href="#" class="nav-link_ active show">FRIENDS</a></li>
                    </ul>
                    <!-- END profile-header-tab -->
                 </div>
