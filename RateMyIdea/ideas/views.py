@@ -41,11 +41,15 @@ def home(request):
     ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating')).order_by('-date_posted')
                                              
     # ideas per page from Idea model
-    paginator = Paginator(ideas_list, 20)
+    paginator = Paginator(ideas_list, 2)
 
     # retrieve page number
     page = request.GET.get('page')
     ideas = paginator.get_page(page)
+    # add ideas to page variable specifically for pagination
+    pages = ideas
+
+    # convert to list for easier access in template with combined_data_set
     ideas_list = list(ideas)
 
     number_of_votes = get_number_of_votes(ideas_list)
@@ -56,7 +60,7 @@ def home(request):
     combined_data_set = zip(ideas_list, number_of_votes, number_of_comments)
 
     form = NewIdeaForm()
-    context = {'ideas': combined_data_set, 'form': form}
+    context = {'ideas': combined_data_set, 'pages': pages, 'form': form}
     return render(request, 'home.html', context)
 
 
@@ -162,7 +166,6 @@ def new_idea(request):
     else:
         form = NewIdeaForm()
         return render(request, 'new_idea.html', {'form': form})
-
 
 
 def about(request):
