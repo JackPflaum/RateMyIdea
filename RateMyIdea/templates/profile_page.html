@@ -95,7 +95,10 @@
                                   </div>
                                   <div class="stats">
                                      {% if request.user.is_authenticated and request.user == author.user %}
-                                       <button class="btn btn-danger-soft text-danger" type="button">delete</button>
+                                     <form method="post" action="{% url 'ideas:delete_idea' idea.slug author.slug %}">
+                                       {% csrf_token %}
+                                       <button class="btn btn-danger-soft text-danger" type="submit">delete</button>
+                                     </form>
                                      {% else %}
                                        <span class="stats-total"></span>
                                      {% endif %}

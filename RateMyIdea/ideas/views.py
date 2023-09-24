@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.http import HttpResponseForbidden
 
 
 def get_number_of_votes(ideas):
@@ -222,4 +223,16 @@ def delete_account(request):
     
     return redirect('ideas:home')
 
-        
+
+@login_required
+def delete_idea(request, idea_slug, author_slug):
+    """users can delete their ideas that they have posted"""
+    if request.method == 'POST':
+        users_idea = get_object_or_404(Idea, slug=idea_slug)
+        # confirm the author of the idea is the same as the logged in user
+        if author_slug == request.user.username:
+            users_idea.delete()
+            return redirect('ideas:author', author_slug)
+        else:
+            messages.warning(request, "You don't have permission to delete this idea")
+            return redirect('ideas:author', author_slug)

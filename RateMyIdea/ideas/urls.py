@@ -14,4 +14,5 @@ urlpatterns = [
     path('author/edit_profile/<slug:slug>', views.edit_profile, name='edit_profile'),
     path('author/security/<slug:slug>', views.profile_security, name='profile_security'),
     path('author/delete_account', views.delete_account, name='delete_account'),
+    path('author/delete_idea/<slug:idea_slug>/<slug:author_slug>/', views.delete_idea, name='delete_idea'),
 ]
