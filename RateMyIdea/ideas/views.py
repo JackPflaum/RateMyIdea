@@ -209,7 +209,7 @@ def edit_profile(request, slug):
 
 @login_required
 def profile_security(request, slug):
-    """allows user to change their password and delete their account"""
+    """allows user to change their password and template gives user access to delete their account"""
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -226,13 +226,15 @@ def profile_security(request, slug):
 def delete_account(request):
     """users can delete their account permanently"""
     if request.method == 'POST':
-        user = request.user
         # logout before deleting account
-        logout(user)
+        user = request.user
+        logout(request)
         user.delete()
+        messages.success(request, "Your account has been permanently deleted.")
         return redirect('ideas:home')
-    
-    return redirect('ideas:home')
+    else:
+        messages.warning(request, "Something went wrong. Please try again.")
+        return redirect('ideas:profile_security', slug=request.user.username)
 
 
 @login_required
