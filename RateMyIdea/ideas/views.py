@@ -9,8 +9,8 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from django.contrib.auth import logout
-from django.http import HttpResponseForbidden
+from django.contrib.auth import logout, update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 def get_number_of_votes(ideas):
@@ -210,8 +210,16 @@ def edit_profile(request, slug):
 @login_required
 def profile_security(request, slug):
     """allows user to change their password and delete their account"""
-    user = get_object_or_404(Author, slug=slug)
-    return render(request, 'profile_security.html', {})
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)    # keep user logged in
+            messages.success(request, "Your password has been updated")
+            return redirect('ideas:author', slug=request.user.username)
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'profile_security.html', {'form': form})
 
 
 @login_required
