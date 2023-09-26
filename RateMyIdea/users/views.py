@@ -16,5 +16,5 @@ def signup(request):
         if user is not None:
             login(request, user)
             messages.success(request, 'Signup successful', extra_tags='alert-success')
-            return redirect('home')
+            return redirect('ideas:home')
     return render(request, 'signup.html', {'form': form})
