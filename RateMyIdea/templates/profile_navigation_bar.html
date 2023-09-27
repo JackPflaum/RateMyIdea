@@ -28,13 +28,11 @@
                    <!-- END profile-header-content -->
                    <!-- BEGIN profile-header-tab -->
                    <ul class="profile-header-tab nav nav-tabs">
-                      <li class="nav-item"><a href="#" class="nav-link_">POSTS</a></li>
+                      <li class="nav-item"><a href="{% url 'ideas:author' author.slug %}" class="nav-link_">POSTS</a></li>
                       <li class="nav-item"><a href="#" class="nav-link_">ABOUT</a></li>
                       {% if request.user.is_authenticated and request.user == author.user %}
                         <li class="nav-item"><a href=" {% url 'ideas:profile_security' request.user.username %}" class="nav-link_">SECURITY</a></li>
                       {% endif %}
-                      <li class="nav-item"><a href="#" class="nav-link_">VIDEOS</a></li>
-                      <li class="nav-item"><a href="#" class="nav-link_ active show">FRIENDS</a></li>
                    </ul>
                    <!-- END profile-header-tab -->
                 </div>
