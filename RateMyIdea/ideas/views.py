@@ -219,7 +219,9 @@ def profile_security(request, slug):
             return redirect('ideas:author', slug=request.user.username)
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'profile_security.html', {'form': form})
+        author = get_object_or_404(Author, slug=slug)
+        context = {'form': form, 'author': author}
+    return render(request, 'profile_security.html', context)
 
 
 @login_required
