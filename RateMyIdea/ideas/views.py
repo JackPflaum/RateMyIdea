@@ -203,7 +203,8 @@ def author(request, slug):
 @login_required
 def edit_profile(request, slug):
     """update author profile with the ability to change avatar and about info"""
-    context ={}
+    author = get_object_or_404(Author, slug=slug)
+    context ={'author': author}
     return render(request, 'edit_profile.html', context)
 
 
