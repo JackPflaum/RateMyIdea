@@ -209,6 +209,14 @@ def edit_profile(request, slug):
 
 
 @login_required
+def about_author(request, slug):
+    """information about this user/author"""
+    author = get_object_or_404(Author, slug=slug)
+    context ={'author': author}
+    return render(request, 'profile_about_page.html', context)
+
+
+@login_required
 def profile_security(request, slug):
     """allows user to change their password and template gives user access to delete their account"""
     if request.method == 'POST':

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container mb-2">
     <div class="row">
        <div class="col-md-12">
           <div id="content" class="content content-full-width">
@@ -29,7 +29,7 @@
                    <!-- BEGIN profile-header-tab -->
                    <ul class="profile-header-tab nav nav-tabs">
                       <li class="nav-item"><a href="{% url 'ideas:author' author.slug %}" class="nav-link_">POSTS</a></li>
-                      <li class="nav-item"><a href="#" class="nav-link_">ABOUT</a></li>
+                      <li class="nav-item"><a href="{% url 'ideas:about_author' author.slug %}" class="nav-link_">ABOUT</a></li>
                       {% if request.user.is_authenticated and request.user == author.user %}
                         <li class="nav-item"><a href=" {% url 'ideas:profile_security' request.user.username %}" class="nav-link_">SECURITY</a></li>
                       {% endif %}
