@@ -29,6 +29,16 @@ def get_number_of_comments(ideas):
         number_of_comments.append(comment_query_set['comments'])
     return number_of_comments
 
+def get_author_context(author):
+    """get the author/user information for profile page"""
+    ideas = Idea.objects.filter(author=author.user)
+
+    # number of ideas the user has published
+    number_of_ideas_published = ideas.count()
+
+    context = {'author': author, 'number_of_ideas_published': number_of_ideas_published}
+    return context
+
 
 def home(request):
     """home page showing most recent ideas posted by users"""
@@ -204,7 +214,7 @@ def author(request, slug):
 def edit_profile(request, slug):
     """update author profile with the ability to change avatar and about info"""
     author = get_object_or_404(Author, slug=slug)
-    context ={'author': author}
+    context = get_author_context(author)
     return render(request, 'edit_profile.html', context)
 
 
@@ -212,7 +222,7 @@ def edit_profile(request, slug):
 def about_author(request, slug):
     """information about this user/author"""
     author = get_object_or_404(Author, slug=slug)
-    context ={'author': author}
+    context = get_author_context(author)
     return render(request, 'profile_about_page.html', context)
 
 
@@ -229,7 +239,8 @@ def profile_security(request, slug):
     else:
         form = PasswordChangeForm(request.user)
         author = get_object_or_404(Author, slug=slug)
-        context = {'form': form, 'author': author}
+        context = {'form': form}
+        context.update(get_author_context(author))
     return render(request, 'profile_security.html', context)
 
 
