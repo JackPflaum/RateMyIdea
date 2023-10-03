@@ -4,6 +4,7 @@ from .models import Idea, Comment, Rating
 from users.models import Author
 from django.db.models import Sum, Avg, Count
 from ideas.forms import NewIdeaForm, CommentForm, RatingForm
+from users.forms import UpdateImageForm
 from django.views import View
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
@@ -11,6 +12,7 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.http import HttpResponseForbidden
 
 
 def get_number_of_votes(ideas):
@@ -216,6 +218,28 @@ def edit_profile(request, slug):
     author = get_object_or_404(Author, slug=slug)
     context = get_author_context(author)
     return render(request, 'edit_profile.html', context)
+
+
+
+@login_required
+def update_profile_image(request, user_id):
+    """allow users to update their profile image"""
+    # check user has permission to update image
+    if request.user.id == user_id:
+        if request.method == 'POST':
+            form = UpdateImageForm(request.POST, request.FILES)
+            if form.is_valid():
+                author = get_object_or_404(Author, slug=request.user.username)
+                author.image = form.cleaned_data.get('image')
+                author.save()
+                return redirect('ideas:profile_page', slug=request.user.username)
+            else:
+                messages.error(request, "Invalid upload. Please try again with different image")
+        else:
+            messages.warning(request, "Something went wrong when updating image. Please try again.")
+            return redirect('ideas:profile_page', slug=request.user.username)
+    else:
+        return HttpResponseForbidden("You do not have permission to perform this action")
 
 
 @login_required
