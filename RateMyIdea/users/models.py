@@ -4,7 +4,16 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.utils.text import slugify
+import os
 
+
+def user_image_upload_destination(instance, filename):
+    """Generate unique filename for the image based on username.
+    I'm creating subfolders for each user to avoid to avoid filename conflicts
+    between users."""
+    username = instance.user.username
+    basename, extension = os.path.splitext(filename)
+    return f'user_images/{username}/{slugify(basename)}{extension}'
 
 class UserManager(BaseUserManager):
     use_in_migration = True
@@ -54,7 +63,7 @@ class Author(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     bio = models.TextField()
-    image = models.ImageField(blank=True)
+    image = models.ImageField(default='images/default_profile_image.png', upload_to=user_image_upload_destination, blank=True)
     joined = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
 

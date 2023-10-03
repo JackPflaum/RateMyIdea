@@ -37,3 +37,11 @@ class UserChangeForm(UserChangeForm):
     class Meta:
         models = User
         fields = ('username', 'email',)
+
+
+class UpdateImageForm(forms.ModelForm):
+	"""Form for users to change their profile image"""
+	class Meta:
+		model = Author
+		fields = ['image']
+		widgets = {'image':forms.ClearableFileInput(attrs={'class': 'form-control-file'}),}
