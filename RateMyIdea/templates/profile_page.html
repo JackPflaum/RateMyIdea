@@ -38,7 +38,7 @@
                             <div class="timeline-body">
                                <div class="timeline-header d-flex justify-content-between">
                                 <div>
-                                    <span class="userimage"><img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt=""></span>
+                                    <span class="userimage"><img src="{{ author.image.url }}" alt="profile-image"></span>
                                     <span class="username"><a href="{% url 'ideas:idea' idea.slug %}">{{ idea.title }}</a> <small></small></span>
                                 </div>
                                     <span class="pull-right text-muted">
