@@ -1,8 +1,7 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html>
 <head>
+{% load static %}
 <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" crossorigin="anonymous">
@@ -12,35 +11,35 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+<nav class="navbar navbar-expand-md navbar-light navbar-custom">
     <div class="container-fluid">
-    <a href="{% url 'ideas:home' %}"><h3 class="navbar-brand">Rate My Idea</h3></a>
-    <ul class="navbar-nav">
-        <li class="nav-item"><a href="{% url 'ideas:home' %}" class="nav-link">Home</a></li>
-        <li class="nav-item"><a href="{% url 'ideas:new_idea' %}" class="nav-link">New Idea</a></li>
-        <li class="nav-item"><a href="{% url 'ideas:about' %}" class="nav-link">About</a></li>
-        <li class="nav-item"><a href="{% url 'ideas:contact' %}" class="nav-link">Contact</a></li>
-        {% if request.user.is_authenticated %}
-            <li class="nav-item"><a href="{% url 'ideas:author' slug=request.user.author.slug %}" class="nav-link">Author</a></li>
-            <li class="nav-item"><a href="{% url 'users:logout' %}" class='btn btn-secondary nav-link'>Logout</a></li>
-        {% else %}
-            <li class="nav-item"><a href="{% url 'users:login' %}" class='btn btn-primary nav-link'>Login</a></li>
-            <li class="nav-item"><a href="{% url 'users:signup' %}" class='btn btn-secondary nav-link'>Signup</a></li>
-        {% endif %}
-    </ul>
-</div>
+        <a href="{% url 'ideas:home' %}" class="navbar-brand">Rate My Idea</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a href="{% url 'ideas:new_idea' %}" class="nav-link">New Idea</a></li>
+                <li class="nav-item"><a href="{% url 'ideas:about' %}" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="{% url 'ideas:contact' %}" class="nav-link">Contact</a></li>
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item pr-2"><a href="{% url 'ideas:author' slug=request.user.author.slug %}" class="nav-link">Author</a></li>
+                    <li class="nav-item"><a href="{% url 'users:logout' %}" class='btn btn-secondary nav-link'>Logout</a></li>
+                {% else %}
+                    <li class="nav-item pr-2"><a href="{% url 'users:login' %}" class='btn btn-primary nav-link'>Login</a></li>
+                    <li class="nav-item"><a href="{% url 'users:signup' %}" class='btn btn-secondary nav-link'>Signup</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
 </nav>
+
 
 <div class="container">
     {% include 'messages.html' %}
 
     {% block content %}
     {% endblock %}
-</div>
-
-
-<div class="mt-5 p-3 bg-dark text-white text-center">
-<p>Footer</p>
 </div>
 
 
