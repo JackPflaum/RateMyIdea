@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.http import HttpResponseForbidden
+from django.core.files.storage import default_storage
 
 
 def get_number_of_votes(ideas):
@@ -230,14 +231,19 @@ def update_profile_image(request, user_id):
             form = UpdateImageForm(request.POST, request.FILES)
             if form.is_valid():
                 author = get_object_or_404(Author, slug=request.user.username)
+
+                # delete old image before updating with new image
+                if author.image:
+                    default_storage.delete(author.image.path)
+
                 author.image = form.cleaned_data.get('image')
                 author.save()
-                return redirect('ideas:profile_page', slug=request.user.username)
+                return redirect('ideas:author', slug=request.user.username)
             else:
                 messages.error(request, "Invalid upload. Please try again with different image")
         else:
             messages.warning(request, "Something went wrong when updating image. Please try again.")
-            return redirect('ideas:profile_page', slug=request.user.username)
+            return redirect('ideas:author', slug=request.user.username)
     else:
         return HttpResponseForbidden("You do not have permission to perform this action")
 
