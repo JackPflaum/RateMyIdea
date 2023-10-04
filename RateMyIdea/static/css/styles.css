@@ -233,9 +233,7 @@ a:hover {
     position: relative;
     z-index: 10;
     margin: 0 0 -20px;
-    padding: 3px;
-    border-radius: 4px;
-    background: #fff
+    border-radius: 50%
 }
 
 .profile-header-img img {
@@ -905,7 +903,8 @@ body{margin-top:20px;
 
 /*-------------------------------Edit Profile Page-------------------------------------*/
 .img-account-profile {
-    height: 10rem;
+    width: 150px;
+    height: 150px;
 }
 .rounded-circle {
     border-radius: 50% !important;
