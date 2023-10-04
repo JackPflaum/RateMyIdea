@@ -12,20 +12,21 @@
         <!-- Profile page navigation-->
         {% include 'profile_navigation_bar.html' %}
         
-        <div class="col-xl-4">
+        <div class="col-xl-4 mb-3">
             <!-- Profile picture card-->
             <div class="card mb-4 mb-xl-0">
                 <div class="card-header">Profile Picture</div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
-                    <img class="img-account-profile rounded-circle mb-2" src="http://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                    <img class="img-account-profile rounded-circle mb-2" src="{{ author.image.url }}" alt="profile_image">
                     <!-- Profile picture help block-->
                     <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                     <!-- Profile picture upload button-->
-                    <form method="post" action="{% url 'update_profile_image' request.user.id %}" enctype="multipart/form-data">
+                    <form method="post" action="{% url 'ideas:update_profile_image' request.user.id %}" enctype="multipart/form-data">
                         {% csrf_token %}
-                        {{ form|crispy }}
-                        <button class="btn btn-primary" type="submit">Upload new image</button>
+                        <input type="file" name="image" accept="image/*" style="display: none;" id="imageInput">
+                        <label for="imageInput" class="btn btn-secondary btn-block">Select Image</label>
+                        <button class="btn btn-primary btn-block" type="submit">Upload new image</button>
                     </form>
                 </div>
             </div>
