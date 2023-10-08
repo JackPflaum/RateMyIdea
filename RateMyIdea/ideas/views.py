@@ -181,14 +181,6 @@ def new_idea(request):
         return render(request, 'new_idea.html', {'form': form})
 
 
-def about(request):
-    return render(request, 'about.html', {})
-
-
-def contact(request):
-    return render(request, 'contact.html', {})
-
-
 def author(request, slug):
     """author profile page showing previous ideas that have been posted"""
     # get author and their ideas
