@@ -24,8 +24,9 @@
                     <!-- Profile picture upload button-->
                     <form method="post" action="{% url 'ideas:update_profile_image' request.user.id %}" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <input type="file" name="image" accept="image/*" style="display: none;" id="imageInput">
-                        <label for="imageInput" class="btn btn-secondary btn-block">Select Image</label>
+                        <div class="mb-2 pl-5">
+                            {{ form.image }}
+                        </div>
                         <button class="btn btn-primary btn-block" type="submit">Upload new image</button>
                     </form>
                 </div>

@@ -217,9 +217,10 @@ def author(request, slug):
 def edit_profile(request, slug):
     """update author profile with the ability to change avatar and about info"""
     author = get_object_or_404(Author, slug=slug)
-    context = get_author_context(author)
+    form = UpdateImageForm()
+    context = {'form': form}
+    context.update(get_author_context(author))
     return render(request, 'edit_profile.html', context)
-
 
 
 @login_required
@@ -229,7 +230,8 @@ def update_profile_image(request, user_id):
     if request.user.id == user_id:
         if request.method == 'POST':
             form = UpdateImageForm(request.POST, request.FILES)
-            if form.is_valid():
+            # check if an image file has been uploaded
+            if form.is_valid() and 'image' in request.FILES:
                 author = get_object_or_404(Author, slug=request.user.username)
 
                 # delete old image before updating with new image
@@ -240,7 +242,8 @@ def update_profile_image(request, user_id):
                 author.save()
                 return redirect('ideas:author', slug=request.user.username)
             else:
-                messages.error(request, "Invalid upload. Please try again with different image")
+                messages.warning(request, "Invalid upload. Please try again with different image")
+                return redirect('ideas:edit_profile', slug=request.user.username)
         else:
             messages.warning(request, "Something went wrong when updating image. Please try again.")
             return redirect('ideas:author', slug=request.user.username)

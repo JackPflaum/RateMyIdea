@@ -44,4 +44,6 @@ class UpdateImageForm(forms.ModelForm):
 	class Meta:
 		model = Author
 		fields = ['image']
-		widgets = {'image':forms.ClearableFileInput(attrs={'class': 'form-control-file'}),}
+		widgets = {
+               'image':forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
+               }
