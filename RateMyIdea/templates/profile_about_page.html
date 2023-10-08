@@ -12,9 +12,11 @@
             <div class="card mb-4">
                 <div class="card-header">About</div>
                 <div class="card-body">
-                    <p>Date Joined: {{ author.joined }}</p>
-                    <p>Ideas Published: {{ number_of_ideas_published }}
-                    <p>Bio: {{ author.bio }}</p>
+                    <div class="col-6">
+                        <p>Date Joined: {{ author.joined }}</p>
+                        <p>Ideas Published: {{ number_of_ideas_published }}
+                        <p>Bio: {{ author.bio }}</p>
+                    </div>
                 </div>
             </div>   
         </div>
