@@ -4,7 +4,7 @@
         <div class="card-body p-2 p-sm-3">
             <div class="media forum-item">
                 <a href="{% url 'ideas:author' idea.author.username %}">
-                    <img src="{{ idea.author.image.url }}" class="mr-3 rounded-circle" width="50" alt="profile-image"/>
+                    <img src="{{ idea.author.author.image.url }}" class="mr-3 home-profile-image" alt="profile-image"/>
                 </a>
                 <div class="media-body">
                     <div class="d-flex justify-content-between">

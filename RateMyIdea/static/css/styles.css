@@ -43,6 +43,14 @@ a:hover {
     }
 }
 
+/*profile image in 'idea_card_format.html' template*/
+.home-profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 40px;
+    overflow: hidden;
+}
+
 .inner-main,
 .inner-sidebar {
     position: absolute;
@@ -909,6 +917,7 @@ body{margin-top:20px;
 .rounded-circle {
     border-radius: 50% !important;
 }
+
 .card {
     box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
 }
