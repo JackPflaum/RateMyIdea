@@ -3,7 +3,7 @@
         {% if pages.has_previous %}
             <li class="page-item">
                 <a class="page-link" href="?page={{ pages.previous_page_number }}" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
+                    <span aria-hidden="true">Prev</span>
                 </a>
             </li>
         {% endif %}
@@ -17,7 +17,7 @@
         {% if pages.has_next %}
             <li class="page-item">
                 <a class="page-link" href="?page={{ pages.next_page_number }}" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
+                    <span aria-hidden="true">Next</span>
                 </a>
             </li>
         {% endif %}
