@@ -104,6 +104,11 @@ class IdeaView(TemplateView):
         context['comment_form'] = CommentForm()
 
         idea = Idea.objects.get(slug=self.kwargs['slug'])    # self.kwargs is captured from the URL pattern
+
+        # get the number of comments for the idea
+        comments_count = Comment.objects.filter(idea=idea).count()
+        context['comments_count'] = comments_count
+
         # if the user is logged in then get the value that they rated the idea
         if self.request.user.is_authenticated:
             user_rating = Rating.objects.filter(idea=idea, author=self.request.user).first()
