@@ -7,19 +7,19 @@
 {% block content %}
 
 <div class="container">
-	<div class="row d-flex justify-content-between mt-3">
+	<div class="row d-flex justify-content-between mt-3 pl-3 pr-3">
 		<div class="col-lg-8">
 			<div class="row d-flex align-items-center">
 				<a href="{% url 'ideas:author' idea.author.username %}" class="d-flex align-items-center">
 					<img class="idea-profile-image mr-2" src="{{ idea.author.author.image.url }}" alt="profile-avatar">
-					<h3>{{ idea.author.username }}</h3>
+					<h4>{{ idea.author.username }}</h4>
 				</a>
 				<div>
                     <p class="text-muted ml-2 mb-0"><i class="bi bi-clock"></i> {{ idea.date_posted|timesince }} ago</p>
                 </div>
 			</div>
 			<div class="row">
-				<h4>{{ idea.title }}</h4>
+				<h1>{{ idea.title }}</h1>
 				<p class="pb-3">{{ idea.idea }}</p>
 			</div>
 		</div>
