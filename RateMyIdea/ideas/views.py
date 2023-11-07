@@ -248,7 +248,6 @@ def update_profile_image(request, user_id):
         return HttpResponseForbidden("You do not have permission to perform this action")
 
 
-@login_required
 def about_author(request, slug):
     """information about this user/author"""
     author = get_object_or_404(Author, slug=slug)
