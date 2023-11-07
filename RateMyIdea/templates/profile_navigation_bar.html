@@ -21,6 +21,9 @@
                         <p class="m-b-10">Ideas Published: {{ number_of_ideas_published }}</p>
                         {% if request.user.is_authenticated and request.user == author.user %}
                            <a href="{% url 'ideas:edit_profile' request.user.username %}" class="btn btn-sm btn-info mb-2">Edit Profile</a>
+                        {% else %}
+                        <!--creates space when edit button is not there-->
+                           <span class="btn mb-4"></span>
                         {% endif %}
                       </div>
                       <!-- END profile-header-info -->
