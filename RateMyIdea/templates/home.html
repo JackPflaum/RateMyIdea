@@ -52,15 +52,23 @@
                 <!-- Inner main header -->
                 <div class="inner-main-header">
                     <a class="nav-link nav-icon rounded-circle nav-link-faded mr-3 d-md-none" href="#" data-toggle="inner-sidebar"><i class="material-icons">arrow_forward_ios</i></a>
+{% comment %}                     
                     <select class="custom-select custom-select-sm w-auto mr-1">
                         <option selected="">Latest</option>
                         <option value="1">Highest Rated</option>
                         <option value="3">Lowest Rated</option>
                         <option value="3">Not Rated Yet</option>
-                    </select>
-                    <span class="input-icon input-icon-sm ml-auto w-auto">
-                        <input type="text" class="form-control form-control-sm bg-gray-200 border-gray-200 shadow-none mb-4 mt-4" placeholder="Search ideas" />
-                    </span>
+                    </select> {% endcomment %}
+
+                    <form method="get" action="{% url 'ideas:home' %}">
+                        <select class="custom-select custom-select-sm w-auto mr-1" onchange="this.form.submit()" name="sort">
+                            <option value="latest" {% if sort_option == 'latest' %}selected{% endif %}>Latest</option>
+                            <option value="highest_rated" {% if sort_option == 'highest_rated' %}selected{% endif %}>Highest Rated</option>
+                            <option value="lowest_rated" {% if sort_option == 'lowest_rated' %}selected{% endif %}>Lowest Rated</option>
+                            <option value="not_rated_yet" {% if sort_option == 'not_rated_yet' %}selected{% endif %}>Not Rated Yet</option>
+                        </select>
+                        <input type="hidden" name="page" value="{{ pages.number }}">
+                    </form>
                 </div>
                 <!-- /Inner main header -->
     
@@ -85,7 +93,7 @@
         <div class="modal fade" id="threadModal" tabindex="-1" role="dialog" aria-labelledby="threadModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <form method='post' action="{% url 'ideas:new_idea' %}">
+                    <form method="post"  action="{% url 'ideas:new_idea' %}">
                         {% csrf_token %}
                         <div class="modal-header d-flex align-items-center bg-primary text-white">
                             <h6 class="modal-title mb-0" id="threadModalLabel">New Idea</h6>
@@ -96,19 +104,17 @@
                         <div class="modal-body">
                                 <!-- Render the 'title' field -->
                                 <div class="form-group">
-                                    {{ form.title.label_tag }}
                                     {{ form.title|as_crispy_field }}
                                     {{ form.title.errors }}
                                 </div>
 
                                 <!-- Render the 'idea' field -->
                                 <div class="form-group">
-                                    {{ form.idea.label_tag }}
                                     {{ form.idea|as_crispy_field }}
                                     {{ form.idea.errors }}
                                 </div>
                             </div>
-    
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>

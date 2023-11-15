@@ -45,13 +45,30 @@ def get_author_context(author):
 
 def home(request):
     """home page showing most recent ideas posted by users"""
+
+    # Get the selected sorting option from the request
+    sort_option = request.GET.get('sort', 'latest')  # default to 'latest' if not specified
+
+    # Define a dictionary to map sorting options to corresponding order_by arguments
+    sorting_options = {
+        'latest': '-date_posted',
+        'highest_rated': '-average_rating',
+        'lowest_rated': 'average_rating',
+        'not_rated_yet': 'date_posted',  # Change this to your desired default order
+    }
+
+    # Check if the selected option is a valid sorting option
+    if sort_option not in sorting_options:
+        sort_option = 'latest'  # default to 'latest' if an invalid option is provided
+
+
     # annotate query_set method allows you to add new fields to an instance in a query_set based on values
     # of related fields or calculations on those fields.
     # average_rating is a new field added to the Idea instance query_set 
     # idea_rating is the related name, meaning the reverse relationship from Idea to Rating.
     # idea_rating__rating is a field lookup that traverses the reverse relationship and accesses the
     # rating field of Rating model.
-    ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating')).order_by('-date_posted')
+    ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating')).order_by(sorting_options[sort_option])
                                              
     # ideas per page from Idea model
     paginator = Paginator(ideas_list, 2)
@@ -73,7 +90,7 @@ def home(request):
     combined_data_set = zip(ideas_list, number_of_votes, number_of_comments)
 
     form = NewIdeaForm()
-    context = {'ideas': combined_data_set, 'pages': pages, 'form': form}
+    context = {'ideas': combined_data_set, 'pages': pages, 'form': form, 'sort_option': sort_option}
     return render(request, 'home.html', context)
 
 
