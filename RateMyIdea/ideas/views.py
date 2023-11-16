@@ -53,7 +53,6 @@ def home(request):
         'latest': '-date_posted',
         'highest_rated': '-average_rating',
         'lowest_rated': 'average_rating',
-        'not_rated_yet': 'date_posted',  # Change this to your desired default order
     }
 
     # annotate query_set method allows you to add new fields to an instance in a query_set based on values
