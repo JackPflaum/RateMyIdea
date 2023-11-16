@@ -2,7 +2,7 @@
     <ul class="pagination justify-content-center mb-0">
         {% if pages.has_previous %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ pages.previous_page_number }}" aria-label="Previous">
+                <a class="page-link" href="?page={{ pages.previous_page_number }}&sort={{ sort_option }}" aria-label="Previous">
                     <span aria-hidden="true">Prev</span>
                 </a>
             </li>
@@ -10,13 +10,13 @@
 
         {% for num in pages.paginator.page_range %}
             <li class="page-item {% if pages.number == num %}active{% endif %}">
-                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                <a class="page-link" href="?page={{ num }}&sort={{ sort_option }}">{{ num }}</a>
             </li>
         {% endfor %}
 
         {% if pages.has_next %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ pages.next_page_number }}" aria-label="Next">
+                <a class="page-link" href="?page={{ pages.next_page_number }}&sort={{ sort_option }}" aria-label="Next">
                     <span aria-hidden="true">Next</span>
                 </a>
             </li>

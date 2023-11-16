@@ -65,9 +65,7 @@
                             <option value="latest" {% if sort_option == 'latest' %}selected{% endif %}>Latest</option>
                             <option value="highest_rated" {% if sort_option == 'highest_rated' %}selected{% endif %}>Highest Rated</option>
                             <option value="lowest_rated" {% if sort_option == 'lowest_rated' %}selected{% endif %}>Lowest Rated</option>
-                            <option value="not_rated_yet" {% if sort_option == 'not_rated_yet' %}selected{% endif %}>Not Rated Yet</option>
                         </select>
-                        <input type="hidden" name="page" value="{{ pages.number }}">
                     </form>
                 </div>
                 <!-- /Inner main header -->

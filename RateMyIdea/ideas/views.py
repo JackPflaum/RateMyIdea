@@ -45,22 +45,16 @@ def get_author_context(author):
 
 def home(request):
     """home page showing most recent ideas posted by users"""
-
     # Get the selected sorting option from the request
     sort_option = request.GET.get('sort', 'latest')  # default to 'latest' if not specified
 
-    # Define a dictionary to map sorting options to corresponding order_by arguments
+    # Defined a dictionary to map sorting options to corresponding order_by arguments
     sorting_options = {
         'latest': '-date_posted',
         'highest_rated': '-average_rating',
         'lowest_rated': 'average_rating',
         'not_rated_yet': 'date_posted',  # Change this to your desired default order
     }
-
-    # Check if the selected option is a valid sorting option
-    if sort_option not in sorting_options:
-        sort_option = 'latest'  # default to 'latest' if an invalid option is provided
-
 
     # annotate query_set method allows you to add new fields to an instance in a query_set based on values
     # of related fields or calculations on those fields.
