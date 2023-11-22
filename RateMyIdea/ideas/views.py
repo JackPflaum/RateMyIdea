@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, JsonResponse
 from django.core.files.storage import default_storage
 
 
@@ -183,6 +183,7 @@ class IdeaView(TemplateView):
 @login_required
 def new_idea(request):
     """new idea form for users to write their idea"""
+    print('reached new_idea view')
     if request.method == 'POST':
         form = NewIdeaForm(request.POST)
         if form.is_valid():
@@ -194,6 +195,36 @@ def new_idea(request):
     else:
         form = NewIdeaForm()
         return render(request, 'new_idea.html', {'form': form})
+
+
+@login_required
+def modal_new_idea(request):
+    """New idea form for users to post their idea. This is for the bootstrap modal form
+    on the home screen"""
+    if request.method == 'POST':
+        # get data from submitted form
+        title = request.POST.get('title')
+        idea = request.POST.get('idea')
+
+        # both fields are required or idea is not submitted and warning message shows.
+        if not title or not idea:
+            messages.warning(request, "A title and idea are both required.")
+            return redirect('ideas:home')
+        
+        # create new Idea object
+        new_idea = Idea(title=title, idea=idea, author=request.user)
+
+        # save new idea or raise exception
+        try:
+            new_idea.save()
+            messages.success(request, "New idea saved successfully")
+            return redirect('ideas:home')
+        except Exception as e:
+            messages.warning(request, f"Error saving new idea: {str(e)}")
+    else:
+        messages.warning(request, "Invalid request.")
+        redirect('ideas:home')
+
 
 
 def author(request, slug):

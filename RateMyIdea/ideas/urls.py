@@ -10,6 +10,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('idea/<slug:slug>', IdeaView.as_view(), name='idea'),
     path('new_idea/', views.new_idea, name='new_idea'),
+    path('modal_new_idea', views.modal_new_idea, name='modal_new_idea'),
     path('author/<slug:slug>', views.author, name='author'),
     path('author/edit_profile/<slug:slug>', views.edit_profile, name='edit_profile'),
     path('update_profile_image/<int:user_id>', views.update_profile_image, name='update_profile_image'),
