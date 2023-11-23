@@ -82,8 +82,7 @@ def home(request):
     # combine data into one set for easier access in template
     combined_data_set = zip(ideas_list, number_of_votes, number_of_comments)
 
-    form = NewIdeaForm()
-    context = {'ideas': combined_data_set, 'pages': pages, 'form': form, 'sort_option': sort_option}
+    context = {'ideas': combined_data_set, 'pages': pages, 'sort_option': sort_option}
     return render(request, 'home.html', context)
 
 
