@@ -30,6 +30,14 @@ a:hover {
     background-color: #e2e8f0;
 }
 
+/*NEW IDEA link on navigation bar*/
+.nav-link-new-idea {
+    color: black !important;
+}
+
+.nav-link-new-idea:hover {
+    color: grey !important;
+}
 
 /*-------------------------------Home Page-------------------------------------*/
 .inner-wrapper {
