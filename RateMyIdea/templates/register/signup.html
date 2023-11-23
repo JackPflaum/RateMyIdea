@@ -4,68 +4,69 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="row d-flex justify-content-center align-items-center" style="height: 100vh">
-        <div class="col-lg-6 col-md-8 col-sm-10 bg-info ">
-            <form method="post" class="form">
-                {% csrf_token %}
-                <h3 class="text-center my-5">Signup</h3>
-                <div class="form-group">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="bi bi-person"></i></span>
+<div class="row justify-content-center m-5">
+    <div class="col-lg-6 col-md-9 col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="form">
+                    {% csrf_token %}
+                    <h3 class="text-center my-5">Signup</h3>
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                            </div>
+                            {% render_field form.username placeholder="Username" class+="form-control" %}
                         </div>
-                        {% render_field form.username placeholder="Username" class+="form-control" %}
+                        {% if form.username.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.username.errors %}
+                                    <strong>{{ error|escape }}</strong><br>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if form.username.errors %}
-                        <div class="alert alert-danger">
-                            {% for error in form.username.errors %}
-                                <strong>{{ error|escape }}</strong><br>
-                            {% endfor %}
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                            </div>
+                            {% render_field form.email placeholder="Email" class+="form-control" %}
                         </div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        </div>
-                        {% render_field form.email placeholder="Email" class+="form-control" %}
+                        {% if form.email.errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.email.errors %}
+                                    <strong>{{ error|escape }}</strong><br>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if form.email.errors %}
-                        <div class="alert alert-danger">
-                            {% for error in form.email.errors %}
-                                <strong>{{ error|escape }}</strong><br>
-                            {% endfor %}
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            </div>
+                            {% render_field form.password1 placeholder="Password" class+="form-control" %}
                         </div>
-                    {% endif %}
-                </div>
-                <div class="form-group">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                        </div>
-                        {% render_field form.password1 placeholder="Password" class+="form-control" %}
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            </div>
+                            {% render_field form.password2 placeholder="Password Confirmation" class+="form-control" %}
                         </div>
-                        {% render_field form.password2 placeholder="Password Confirmation" class+="form-control" %}
                     </div>
-                </div>
-                <div class="form-group text-center">
-                    <button type="submit" class="btn btn-primary">Register</button>
-                </div>
-                <div class="form-group">
-                    <p>Already have an account? <a href="{% url 'users:login' %}">login</a></p>
-                </div>
-            </form>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                    <div class="form-group">
+                        <p>Already have an account? <a href="{% url 'users:login' %}">login</a></p>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
 
 {% endblock %}

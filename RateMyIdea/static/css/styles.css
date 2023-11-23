@@ -976,3 +976,9 @@ body{margin-top:20px;
     margin-left: 1rem;
     margin-right: 1rem;
 }
+
+
+/*-------------------------------Login, register and password reset pages-------------------------------------*/
+.login-card {
+    background-color: white;
+}
