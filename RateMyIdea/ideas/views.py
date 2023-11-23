@@ -336,6 +336,7 @@ def delete_idea(request, idea_slug, author_slug):
         # confirm the author of the idea is the same as the logged in user
         if author_slug == request.user.username:
             users_idea.delete()
+            messages.success(request, "Idea has been deleted.")
             return redirect('ideas:author', author_slug)
         else:
             messages.warning(request, "You don't have permission to delete this idea")
