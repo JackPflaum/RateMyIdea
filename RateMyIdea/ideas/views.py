@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .models import Idea, Comment, Rating
 from users.models import Author
 from django.db.models import Sum, Avg, Count
@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.http import HttpResponseForbidden, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponseForbidden
 from django.core.files.storage import default_storage
 
 
@@ -232,13 +232,23 @@ def author(request, slug):
     author = get_object_or_404(Author, slug=slug)
     ideas = Idea.objects.filter(author=author.user).annotate(average_rating=Avg('idea_rating__rating')).order_by('-date_posted')
 
-    ideas_list = list(ideas)
+    paginator = Paginator(ideas, 2)
+    page = request.GET.get('page')
+
+    try:
+        pages = paginator.get_page(page)
+    except PageNotAnInteger:
+        pages = paginator.get_page(1)
+    except EmptyPage:
+        pages = paginator.get_page(paginator.num_pages)
+
+    ideas_list = list(pages)
     
     # get number of user votes for each idea
-    number_of_votes = get_number_of_votes(ideas)
+    number_of_votes = get_number_of_votes(ideas_list)
 
     # get number of comments for each idea
-    number_of_comments = get_number_of_comments(ideas)
+    number_of_comments = get_number_of_comments(ideas_list)
 
     # combine data into one set for easier access in template
     combined_data_set = zip(ideas_list, number_of_votes, number_of_comments)
@@ -246,8 +256,10 @@ def author(request, slug):
     # number of ideas the user has published
     number_of_ideas_published = ideas.count()
 
-    context = {'author': author, 'ideas': combined_data_set, 'number_of_ideas_published': number_of_ideas_published}
+    context = {'author': author, 'ideas': combined_data_set,
+               'number_of_ideas_published': number_of_ideas_published, 'pages': pages}
     return render(request, 'profile_page.html', context)
+
 
 
 @login_required

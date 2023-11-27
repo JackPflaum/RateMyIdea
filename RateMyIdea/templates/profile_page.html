@@ -26,7 +26,6 @@
                             <!-- begin timeline-time -->
                             <div class="timeline-time">
                                <span class="date">{{ idea.date_posted }}</span>
-                               <span class="time">04:20</span>
                             </div>
                             <!-- end timeline-time -->
                             <!-- begin timeline-icon -->
@@ -76,20 +75,11 @@
                          </li>
                          {% endfor %}
                          {% endif %}
-                         <li>
-                            <!-- begin timeline-icon -->
-                            <div class="timeline-icon">
-                               <a href="javascript:;">&nbsp;</a>
-                            </div>
-                            <!-- end timeline-icon -->
-                            <!-- begin timeline-body -->
-                            <div class="timeline-body">
-                               Loading...
-                            </div>
-                            <!-- begin timeline-body -->
-                         </li>
                       </ul>
                       <!-- end timeline -->
+
+                      {% include 'pagination.html' %}
+                      
                    </div>
                    <!-- end #profile-post tab -->
                 </div>
@@ -100,5 +90,7 @@
        </div>
     </div>
  </div>
+
+
 
 {% endblock %}
