@@ -47,3 +47,24 @@ class UpdateImageForm(forms.ModelForm):
 		widgets = {
                'image':forms.ClearableFileInput(attrs={'class': 'form-control-file'}),
                }
+          
+
+class UpdateAccountDetailsForm(forms.Form):
+     """Form for users to change their user details"""
+     username = forms.CharField(max_length=255)
+     email = forms.EmailField()
+     bio = forms.CharField(widget=forms.Textarea, max_length=2000)
+
+     def clean_username(self):
+          """username has to be unique"""
+          username = self.cleaned_data['username']
+          if User.objects.filter(username=username).exclude(pk=self.instance.pk).exists():
+               raise forms.ValidationError("This username is already in use.")
+          return username
+     
+     def clean_email(self):
+          """email has to be unique"""
+          email = self.cleaned_data['email']
+          if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+               raise forms.ValidationError("This email is already in use.")
+          return email

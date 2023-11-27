@@ -4,7 +4,7 @@ from .models import Idea, Comment, Rating
 from users.models import Author
 from django.db.models import Sum, Avg, Count
 from ideas.forms import NewIdeaForm, CommentForm, RatingForm
-from users.forms import UpdateImageForm
+from users.forms import UpdateImageForm, UpdateAccountDetailsForm
 from django.views import View
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
@@ -266,8 +266,9 @@ def author(request, slug):
 def edit_profile(request, slug):
     """update author profile with the ability to change avatar and about info"""
     author = get_object_or_404(Author, slug=slug)
-    form = UpdateImageForm()
-    context = {'form': form}
+    image_form = UpdateImageForm()
+    account_details_form = UpdateAccountDetailsForm()
+    context = {'image_form': image_form, 'account_details_form': account_details_form}
     context.update(get_author_context(author))
     return render(request, 'edit_profile.html', context)
 
@@ -298,6 +299,34 @@ def update_profile_image(request, user_id):
             return redirect('ideas:author', slug=request.user.username)
     else:
         return HttpResponseForbidden("You do not have permission to perform this action")
+
+
+@login_required
+def update_account_details(request, user_id):
+    """update username, email and profile bio"""
+    author = get_object_or_404(Author, user=request.user)
+    if request.user.id == 'user_id':
+        if request.method == 'POST':
+            form = UpdateAccountDetailsForm(request.POST)
+            if form.is_valid():            
+                request.user.username = form.cleaned_data.get('username')
+                request.user.email = form.cleaned_data.get('email')
+                author.bio = form.cleaned_data.get('bio')
+                    
+                request.user.save()
+                author.save()
+                    
+                messages.success(request, "Account details updated successfully.")
+                return redirect('ideas:edit_profile', slug=request.user.username)
+            else:
+                messages.warning(request, "")
+                return redirect('ideas:edit_profile', slug=request.user.username)
+        else:
+            messages.warning(request, "")
+            return redirect('ideas:edit_profile', slug=request.user.username)
+    else:
+        messages.warning(request, "")
+        return redirect('ideas:edit_profile', slug=request.user.username)
 
 
 def about_author(request, slug):
