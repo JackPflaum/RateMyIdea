@@ -50,21 +50,30 @@ class UpdateImageForm(forms.ModelForm):
           
 
 class UpdateAccountDetailsForm(forms.Form):
-     """Form for users to change their user details"""
-     username = forms.CharField(max_length=255)
-     email = forms.EmailField()
-     bio = forms.CharField(widget=forms.Textarea, max_length=2000)
+    """Form for users to change their user details"""
+    username = forms.CharField(max_length=255)
+    email = forms.EmailField()
+    bio = forms.CharField(widget=forms.Textarea, max_length=2000)
 
-     def clean_username(self):
-          """username has to be unique"""
-          username = self.cleaned_data['username']
-          if User.objects.filter(username=username).exclude(pk=self.instance.pk).exists():
-               raise forms.ValidationError("This username is already in use.")
-          return username
+    # updating form to accept request parameters
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(UpdateAccountDetailsForm, self).__init__(*args, **kwargs)
+
+    def clean_username(self):
+        """username has to be unique"""
+        username = self.cleaned_data['username']
+        # is_bound checks if form has received data through a request (typically a POST).
+        # check for uniqueness excluding current username
+        if self.is_bound and User.objects.filter(username=username).exclude(pk=self.request.user.pk).exists():
+            raise forms.ValidationError("This username is already in use.")
+        return username
      
-     def clean_email(self):
-          """email has to be unique"""
-          email = self.cleaned_data['email']
-          if User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
-               raise forms.ValidationError("This email is already in use.")
-          return email
+    def clean_email(self):
+        """email has to be unique"""
+        email = self.cleaned_data['email']
+            
+        # check for uniqueness excluding current email
+        if self.is_bound and User.objects.filter(email=email).exclude(pk=self.request.user.pk).exists():
+            raise forms.ValidationError("This email is already in use.")
+        return email
