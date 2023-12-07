@@ -14,6 +14,7 @@ from django.contrib.auth import logout, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.http import HttpResponseForbidden
 from django.core.files.storage import default_storage
+from django.utils.text import slugify
 
 
 def get_number_of_votes(ideas):
@@ -41,6 +42,7 @@ def get_author_context(author):
 
     context = {'author': author, 'number_of_ideas_published': number_of_ideas_published}
     return context
+
 
 
 def home(request):
@@ -267,8 +269,15 @@ def edit_profile(request, slug):
     """update author profile with the ability to change avatar and about info"""
     author = get_object_or_404(Author, slug=slug)
     image_form = UpdateImageForm()
-    account_details_form = UpdateAccountDetailsForm()
-    context = {'image_form': image_form, 'account_details_form': account_details_form}
+
+    # add current account details to form for user reference
+    initial_data = {
+        'username': author.user.username,
+        'email': author.user.email,
+        'bio': author.bio
+    }
+    update_account_details_form = UpdateAccountDetailsForm(initial=initial_data)
+    context = {'image_form': image_form, 'update_account_details_form': update_account_details_form}
     context.update(get_author_context(author))
     return render(request, 'edit_profile.html', context)
 
@@ -305,28 +314,33 @@ def update_profile_image(request, user_id):
 def update_account_details(request, user_id):
     """update username, email and profile bio"""
     author = get_object_or_404(Author, user=request.user)
-    if request.user.id == 'user_id':
+    # check user has permission to update account details
+    if request.user.id == user_id:
         if request.method == 'POST':
-            form = UpdateAccountDetailsForm(request.POST)
-            if form.is_valid():            
-                request.user.username = form.cleaned_data.get('username')
+            form = UpdateAccountDetailsForm(request.POST, request=request)
+            if form.is_valid():
+                new_username = form.cleaned_data.get('username')
+
+                # update user details
+                request.user.username = new_username
                 request.user.email = form.cleaned_data.get('email')
-                author.bio = form.cleaned_data.get('bio')
-                    
                 request.user.save()
+
+                # update author bio
+                author.bio = form.cleaned_data.get('bio')
+                author.slug = new_username # update author slug to match User username
                 author.save()
-                    
+                        
                 messages.success(request, "Account details updated successfully.")
                 return redirect('ideas:edit_profile', slug=request.user.username)
             else:
-                messages.warning(request, "")
+                messages.warning(request, "The username or email is already in use.")
                 return redirect('ideas:edit_profile', slug=request.user.username)
         else:
-            messages.warning(request, "")
+            messages.warning(request, "Invalid request method")
             return redirect('ideas:edit_profile', slug=request.user.username)
     else:
-        messages.warning(request, "")
-        return redirect('ideas:edit_profile', slug=request.user.username)
+        return HttpResponseForbidden("You do not have permission to perform this action")
 
 
 def about_author(request, slug):

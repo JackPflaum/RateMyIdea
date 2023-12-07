@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import User
 from .models import Author
+from django.utils.text import slugify
 
 class SignUpForm(UserCreationForm):
     """User signup form"""
@@ -51,7 +52,8 @@ class UpdateImageForm(forms.ModelForm):
 
 class UpdateAccountDetailsForm(forms.Form):
     """Form for users to change their user details"""
-    username = forms.CharField(max_length=255)
+    username = forms.CharField(max_length=255,
+                               label="Username (symbols like '#', '.', '/', '!', '@' etc. are not allowed and will be removed automatically)")
     email = forms.EmailField()
     bio = forms.CharField(widget=forms.Textarea, max_length=2000)
 
@@ -63,11 +65,15 @@ class UpdateAccountDetailsForm(forms.Form):
     def clean_username(self):
         """username has to be unique"""
         username = self.cleaned_data['username']
+        
+        # slugify username to remove invalid URL symbols
+        slugified_username = slugify(username)
+
         # is_bound checks if form has received data through a request (typically a POST).
         # check for uniqueness excluding current username
-        if self.is_bound and User.objects.filter(username=username).exclude(pk=self.request.user.pk).exists():
+        if self.is_bound and User.objects.filter(username=slugified_username).exclude(pk=self.request.user.pk).exists():
             raise forms.ValidationError("This username is already in use.")
-        return username
+        return slugified_username
      
     def clean_email(self):
         """email has to be unique"""
