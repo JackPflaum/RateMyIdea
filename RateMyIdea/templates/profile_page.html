@@ -78,8 +78,16 @@
                       </ul>
                       <!-- end timeline -->
 
-                      {% include 'pagination.html' %}
-                      
+                      {% if number_of_ideas_published %}
+                        {% include 'pagination.html' %}
+                      {% else %}
+                        <div class="card col-6 mx-auto">
+                           <div class="card-body">
+                              <h3 class="card-title text-center">No ideas have been published</h3>
+                           </div>
+                        </div>
+                      {% endif %}
+
                    </div>
                    <!-- end #profile-post tab -->
                 </div>
