@@ -27,7 +27,7 @@
                 </div>
                 {% if request.user.is_authenticated %}
                     <li class="nav-item pr-2">
-                        <a href="{% url 'ideas:author' slug=request.user.author.slug %}" class="nav-link">Author</a>
+                        <a href="{% url 'ideas:author' slug=request.user.author.slug %}" class="nav-link">{{ request.user.username }}</a>
                     </li>
                     <li class="nav-item"><a href="{% url 'users:logout' %}" class='btn btn-secondary nav-link'>Logout</a></li>
                 {% else %}
