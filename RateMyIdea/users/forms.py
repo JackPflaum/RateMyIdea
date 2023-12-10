@@ -21,9 +21,13 @@ class SignUpForm(UserCreationForm):
     def clean_username(self):
         """validate and clean username data"""
         username = self.cleaned_data.get('username')
-        if User.objects.filter(username=username).exists():
+
+        # slugify username to remove invalid URL symbols
+        slugified_username = slugify(username)
+
+        if User.objects.filter(username=slugified_username).exists():
             raise forms.ValidationError("This username has already been taken")
-        return username
+        return slugified_username
 
     def save(self, commit=True):
         """save user data to the User database"""
