@@ -22,7 +22,7 @@
             <ul class="navbar-nav ml-auto">
                 <div class="d-flex justify-content-center"> <!-- Center the "New Idea" <li> -->
                     <li class="nav-item">
-                        <a href="{% url 'ideas:new_idea' %}" class="nav-link nav-link-new-idea">NEW IDEA</a>
+                        {% include 'new_idea_modal_button.html' %}
                     </li>
                 </div>
                 {% if request.user.is_authenticated %}
