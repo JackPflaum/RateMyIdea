@@ -63,7 +63,7 @@ class Author(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     bio = models.TextField()
-    image = models.ImageField(default='images/default_profile_image.png', upload_to=user_image_upload_destination, blank=True)
+    image = models.ImageField(default='default_profile_image.png', upload_to=user_image_upload_destination, blank=True)
     joined = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(unique=True, blank=True, null=True)
 
