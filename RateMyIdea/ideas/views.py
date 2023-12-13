@@ -66,7 +66,7 @@ def home(request):
     ideas_list = Idea.objects.all().annotate(average_rating=Avg('idea_rating__rating')).order_by(sorting_options[sort_option])
                                              
     # ideas per page from Idea model
-    paginator = Paginator(ideas_list, 2)
+    paginator = Paginator(ideas_list, 3)
 
     # retrieve page number
     page = request.GET.get('page')
@@ -221,7 +221,8 @@ def modal_new_idea(request):
             messages.success(request, "New idea saved successfully")
             return redirect('ideas:home')
         except Exception as e:
-            messages.warning(request, f"Error saving new idea: {str(e)}")
+            messages.warning(request, f"Idea title is already taken.")
+            return redirect('ideas:home')
     else:
         messages.warning(request, "Invalid request.")
         redirect('ideas:home')
