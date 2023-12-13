@@ -7,7 +7,29 @@
 {% block content %}
 
 <div class="container">
+	
+	<!--Idea section-->
 
+	<div class="row d-flex justify-content-between mt-3">
+		<div class="col-lg-9">
+			<div>
+				<div class="row d-flex">
+					<img class="idea-profile-image mr-2 mt-1" src="{{ idea.author.author.image.url }}" alt="profile-avatar">
+					<div>
+						<h2>{{ idea.title }}</h2>
+						<p> 
+							<a href="{% url 'ideas:author' idea.author.username %}">{{ idea.author.username }}</a>
+							<i class="bi bi-clock mr-1"></i><span class="text-muted">{{ idea.date_posted|timesince }} ago</span>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div>
+				<p class="pb-3">{{ idea.idea }}</p>
+			</div>
+		</div>
+
+{% comment %} 
 	<!--Idea section-->
 	<div class="row d-flex justify-content-between mt-3">
 		<div class="col-lg-2">
@@ -25,33 +47,33 @@
 			<h1>{{ idea.title }}</h1>
 			<p class="pb-3">{{ idea.idea }}</p>
 		</div>
-
+ {% endcomment %}
 
 		<!-- Rating Section -->
 		<div class="col-lg-3">
-		<div class="card">
-			{% if rating|is_numeric %}
-				<h5 class="card-header">Rating {{ rating|floatformat:1 }}/10</h5>
-			{% else %}
-				<p class="card-header">Be the first to rate this idea</p>
-			{% endif %}
-			<div class="card-body">
-				<form method="post">
-					{% csrf_token %}
-					{{ rating_form|crispy }}
-					{% if user_rating_value %}
-						<p class="text-success">You rated this {{ user_rating_value }}/10</p>
-					{% endif %}
-	
-					{% if user.is_authenticated %}
-						<button type="submit" class="btn btn-primary">Submit</button>
-					{% else %}
-						<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
-					{% endif %}
-				</form>
+			<div class="card">
+				{% if rating|is_numeric %}
+					<h5 class="card-header">Rating {{ rating|floatformat:1 }}/10</h5>
+				{% else %}
+					<p class="card-header">Be the first to rate this idea</p>
+				{% endif %}
+				<div class="card-body">
+					<form method="post">
+						{% csrf_token %}
+						{{ rating_form|crispy }}
+						{% if user_rating_value %}
+							<p class="text-success">You rated this {{ user_rating_value }}/10</p>
+						{% endif %}
+		
+						{% if user.is_authenticated %}
+							<button type="submit" class="btn btn-primary">Submit</button>
+						{% else %}
+							<a href="{% url 'users:login' %}?next={{ request.path }}" class="btn btn-primary">Login</a>
+						{% endif %}
+					</form>
+				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 
 	<!-- Comments section -->
