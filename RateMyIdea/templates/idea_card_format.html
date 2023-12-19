@@ -3,9 +3,11 @@
     <div class="card mb-2">
         <div class="card-body p-2 p-sm-3">
             <div class="media forum-item">
-                <a href="{% url 'ideas:author' idea.author.username %}">
-                    <img src="{{ idea.author.author.image.url }}" class="mr-3 home-profile-image" alt="profile-image"/>
-                </a>
+                <div class="profile-img mr-3">
+                    <a href="{% url 'ideas:author' idea.author.username %}">
+                        <img src="{{ idea.author.author.image.url }}" alt="profile-image"/>
+                    </a>
+                </div>
                 <div class="media-body">
                     <div class="d-flex justify-content-between">
                         <h5><a href="{% url 'ideas:idea' idea.slug %}" class="text-body">{{ idea.title }}</a></h5>

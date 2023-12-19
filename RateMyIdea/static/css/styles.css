@@ -193,6 +193,23 @@ a:hover {
 }
 
 
+.profile-img {
+    float: left;
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+    margin: 0 0 -20px;
+    border-radius: 50%
+}
+
+.profile-img img {
+    max-width: 100%
+}
+
+
+
 
 
 

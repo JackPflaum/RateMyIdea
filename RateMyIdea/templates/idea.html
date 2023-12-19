@@ -14,7 +14,9 @@
 		<div class="col-lg-9">
 			<div>
 				<div class="row d-flex">
-					<img class="idea-profile-image mr-2 mt-1" src="{{ idea.author.author.image.url }}" alt="profile-avatar">
+					<div class="profile-img mr-2">
+						<img src="{{ idea.author.author.image.url }}" alt="profile-avatar">
+					</div>
 					<div>
 						<h2>{{ idea.title }}</h2>
 						<p> 
@@ -28,26 +30,6 @@
 				<p class="pb-3">{{ idea.idea }}</p>
 			</div>
 		</div>
-
-{% comment %} 
-	<!--Idea section-->
-	<div class="row d-flex justify-content-between mt-3">
-		<div class="col-lg-2">
-			<div class="row d-flex align-items-center">
-				<a href="{% url 'ideas:author' idea.author.username %}" class="d-flex align-items-center">
-					<img class="idea-profile-image mr-2" src="{{ idea.author.author.image.url }}" alt="profile-avatar">
-					<h4>{{ idea.author.username }}</h4>
-				</a>
-				<div>
-                    <p class="text-muted ml-2 mb-0"><i class="bi bi-clock"></i> {{ idea.date_posted|timesince }} ago</p>
-                </div>
-			</div>
-		</div>
-		<div class="col-lg-7">
-			<h1>{{ idea.title }}</h1>
-			<p class="pb-3">{{ idea.idea }}</p>
-		</div>
- {% endcomment %}
 
 		<!-- Rating Section -->
 		<div class="col-lg-3">
@@ -101,7 +83,9 @@
 
 			{% for comment in comments %}
 			<div class="d-flex mb-2">
-				<img class="home-profile-image mr-2" src="{{ comment.author.author.image.url }}" alt="profile-avatar">
+				<div class="profile-img mr-2">
+					<img src="{{ comment.author.author.image.url }}" alt="profile-avatar">
+				</div>
 				<div class="card w-100">
 					<div class="card-body">
 						<div class="d-flex justify-content-between">
