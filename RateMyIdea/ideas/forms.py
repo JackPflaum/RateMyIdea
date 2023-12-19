@@ -19,3 +19,4 @@ class RatingForm(forms.ModelForm):
         model = Rating
         fields = ('rating',)
         widgets = {'rating': forms.Select(choices=[(i, str(i)) for i in range(1, 11)])}
+        labels = {'rating': 'Rate'}
