@@ -151,8 +151,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
 # tells django where to redirect user after login and logout
-LOGIN_URL = 'users:login'
+LOGIN_URL = 'login'
 
 LOGIN_REDIRECT_URL = 'ideas:home'
 
 LOGOUT_REDIRECT_URL = 'ideas:home'
+
+# email server configuration
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_USE_TLS = False
